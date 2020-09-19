@@ -18,12 +18,13 @@
   <title>PynPoint</title>
   </head>
   <body>
+    <!-- Nav bar, indludes branding and all links to other page functions -->
     <nav class="navbar navbar-light bg-success">
       <a class="navbar-brand" href="#">
         <img src="img/pynPoint_.png" width="120" height="40" alt="" loading="lazy">
       </a>
       <div id="nav-buttons" class="btn-group" role="group">
-        <button class="navbtn btn bg-primary" type="button">Create Maps</button>
+        <button class="navbtn btn bg-primary" type="button">Create A Map!</button>
         <div class="btn-group" role="group">
           <button id="btn-nav-maps" type="button" class="navbtn btn bg-warning dropdown-toggle" data-toggle="dropdown">
             View Maps
@@ -36,23 +37,29 @@
             <a class="dropdown-item" href="#">Popular Maps</a>
           </div>
         </div>
+        <!-- Profile contains user data and pynPoint settings -->
         <button class="navbtn btn bg-info" type="button">Profile</button>
-        <button class="navbtn btn bg-secondary" type="button">Settings</button>
         <button class="navbtn btn bg-danger" type="button">Logout</button>
       </div>
     </nav>
+    <!-- these containers house the various pages of pynPoint -->
     <div id="pynPoint-container">
+      <!-- contains the map frame to create a new map -->
       <div id="container-create-map">
       </div>
+      <!-- view my maps, team maps, fav maps, and popular maps (most favorites) if public -->
       <div id="container-view-maps">
       </div>
+      <!-- view/set user settings, includes user details and settings
+      change page settings (default maps to hidden, -->
       <div id="container-profile">
       </div>
-      <div id="container-settings">
-      </div>
+      <!-- default page, if cookie is not detected on root route present login
+      otherwise show landing page (My Maps) -->
       <div id="container-login">
         <h1>Welcome to pynPoint!<h1>
         <h4>Please login to start creating maps!</h4>
+        <!-- login modal -->
         <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -79,7 +86,8 @@
                 </div>
               </div>
               <div class="modal-footer d-flex justify-content-center">
-                <button class="btn btn-success" id="button-launch-modal">Login</button>
+                <!-- change page to view My Maps -->
+                <button class="btn btn-success" id="button-launch-modal">Submit</button>
               </div>
             </div>
           </div>
