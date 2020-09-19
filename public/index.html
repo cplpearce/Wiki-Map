@@ -3,19 +3,28 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- CSS only -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <!-- JS, Popper.js, and jQuery -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" ></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <!-- Ubuntu Condensed and Oswald Regular Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Ubuntu+Condensed&display=swap" rel="stylesheet">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="styles/custom.css">
-  <!-- Custom JS -->
-  <script src="scripts/custom.js"></script>
-  <title>PynPoint</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- js, popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Ubuntu Condensed and Oswald Regular Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Ubuntu+Condensed&display=swap" rel="stylesheet">
+    <!-- Leaflet (leaflet req css after js) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Stamen js -->
+    <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles/custom.css">
+    <!-- Custom general js -->
+    <script src="scripts/client.js"></script>
+    <!-- Custom leaflet js -->
+    <script src="scripts/leaflet.js"></script>
+
+    <title>PynPoint</title>
   </head>
   <body>
     <!-- Nav bar, indludes branding and all links to other page functions -->
@@ -24,9 +33,9 @@
         <img src="img/pynPoint_.png" width="120" height="40" alt="" loading="lazy">
       </a>
       <div id="nav-buttons" class="btn-group" role="group">
-        <button class="navbtn btn bg-primary" type="button">Create A Map!</button>
+        <button class="btn-hover-white btn bg-primary" type="button">Create A Map!</button>
         <div class="btn-group" role="group">
-          <button id="btn-nav-maps" type="button" class="navbtn btn bg-warning dropdown-toggle" data-toggle="dropdown">
+          <button id="btn-nav-maps" type="button" class="btn-hover-white btn bg-warning dropdown-toggle" data-toggle="dropdown">
             View Maps
           </button>
           <div class="dropdown-menu">
@@ -38,14 +47,33 @@
           </div>
         </div>
         <!-- Profile contains user data and pynPoint settings -->
-        <button class="navbtn btn bg-info" type="button">Profile</button>
-        <button class="navbtn btn bg-danger" type="button">Logout</button>
+        <button class="btn-hover-white btn bg-info" type="button">Profile</button>
+        <button class="btn-hover-white btn bg-danger" type="button">Logout</button>
       </div>
     </nav>
-    <!-- these containers house the various pages of pynPoint -->
+    <!-- These containers house the various pages of pynPoint -->
     <div id="pynPoint-container">
-      <!-- contains the map frame to create a new map -->
+      <!-- Contains the map frame to create a new map -->
       <div id="container-create-map">
+        <div id="new-map-frame">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <!-- This is the map frame tab-->
+              <a class="nav-link active" href="#">Map</a>
+            </li>
+            <li class="nav-item">
+              <!-- This is the drawn points tab -->
+              <!-- this will let the user change metadata, coords, etc of each point -->
+              <a class="nav-link" href="#">My Points</a>
+            </li>
+            <li class="nav-item">
+              <!-- Here will go teams, privacy, and sharing settings -->
+              <a class="nav-link" href="#">Map Settings</a>
+            </li>
+          </ul>
+          <div id="map-frame">
+          </div>
+        </div>
       </div>
       <!-- view my maps, team maps, fav maps, and popular maps (most favorites) if public -->
       <div id="container-view-maps">
@@ -87,13 +115,13 @@
               </div>
               <div class="modal-footer d-flex justify-content-center">
                 <!-- change page to view My Maps -->
-                <button class="btn btn-success" id="button-launch-modal">Submit</button>
+                <button class="btn btn-success btn-hover-white" id="button-launch-modal">Submit</button>
               </div>
             </div>
           </div>
         </div>
         <div class="text-center">
-          <button href="" type="button" class="btn bg-success btn-lg" data-toggle="modal" data-target="#modalLoginForm">Login</button>
+          <button href="" type="button" class="btn bg-success btn-lg btn-hover-white" data-toggle="modal" data-target="#modalLoginForm">Login</button>
         </div>
       </div>
     </div>
