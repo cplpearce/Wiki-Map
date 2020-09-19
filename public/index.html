@@ -19,10 +19,29 @@
 <body>
   <nav class="navbar navbar-light bg-success">
     <a class="navbar-brand" href="#">
-      <img src="img/pynPoint_.png" width="130" height="40" alt="" loading="lazy">
+      <img src="img/pynPoint_.png" width="120" height="40" alt="" loading="lazy">
     </a>
-    <span class="navbar-brand mb-0 h1">Map</span>
+    <div class="btn-group" role="group">
+      <button class="navbtn btn bg-primary" type="button">Create Maps</button>
+      <div class="btn-group" role="group">
+        <button id="btn-nav-maps" type="button" class="navbtn btn bg-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          View Maps
+        </button>
+        <div class="dropdown-menu" aria-labelledby="btn-nav-maps">
+          <a class="dropdown-item" href="#">My Maps</a>
+          <a class="dropdown-item" href="#">Team Maps</a>
+          <a class="dropdown-item" href="#">Favorite Maps</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Popular Maps</a>
+        </div>
+      </div>
+      <button class="navbtn btn bg-info" type="button">Profile</button>
+      <button class="navbtn btn bg-secondary" type="button">Settings</button>
+      <button class="navbtn btn bg-danger" type="button">Logout</button>
+    </div>
   </nav>
-  <h1>Helllo!</h1>
+  <div id="pynPoint-container">
+    Div
+  </div>
 </body>
 </html>
