@@ -1,4 +1,6 @@
-// A $( document ).ready() block.
+// Js module for creating a new map
+
+// A $( document ).ready() listner
 $( document ).ready(function() {
   // replace "toner" here with "terrain" or "watercolor"
   const layer = new L.StamenTileLayer("toner");
