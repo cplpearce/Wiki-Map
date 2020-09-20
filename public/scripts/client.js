@@ -8,6 +8,7 @@ $( document ).ready(function() {
   $( "[id|='view']" ).click(function() {
     // Fade all the divs
     $( '#pynPoint-container' ).children().css('display', 'none');
+    // Show the element desired
     $( `#container-${this.id.split('-').slice(1).join('-')}` ).css('display', 'flex');
   });
 });

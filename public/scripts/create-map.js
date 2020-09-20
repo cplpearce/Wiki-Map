@@ -5,7 +5,7 @@ $( document ).ready(function() {
   // replace "toner" here with "terrain" or "watercolor"
   const layer = new L.StamenTileLayer("toner");
   const map = new L.Map("map-frame", {
-      center: new L.LatLng(37.7, -122.4),
+      center: new L.LatLng(43.6532, -79.3832),
       zoom: 12
   });
   map.addLayer(layer);
