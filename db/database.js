@@ -1,4 +1,4 @@
-const bcrypt = require('../node_modules/bcrypt');
+const bcrypt = require('../node_modules/bcrypt-pbkdf');
 
 const { Pool } = require('pg');
 

@@ -17,13 +17,18 @@ module.exports = (db) => {
   });
 
   router.get("/:id", (req, res) => {
-    getUsersByEmail();
-
-
-    db.query(`SELECT * FROM users;`)
+    const user_id = req.params.id;
+    db.query(
+      `SELECT name, email, maps.title AS owned_maps, favorite_maps.map_id AS favorites, collaborations.map_id AS collaborations
+      FROM users
+      LEFT JOIN maps ON owner_id = users.id
+      LEFT JOIN favorite_maps ON favorite_maps.user_id = users.id
+      LEFT JOIN collaborations ON collaborations.user_id = users.id
+      WHERE users.id = $1;`,
+      [user_id])
       .then(data => {
-        const users = data.rows;
-        res.json({ users });
+        const users = data.rows[0];
+        res.json(users);
       })
       .catch(err => {
         res
