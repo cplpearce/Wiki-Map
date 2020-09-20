@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS markers CASCADE;
+
+CREATE TABLE markers (
+  id SERIAL PRIMARY KEY NOT NULL,
+  title VARCHAR(255),
+  description TEXT,
+  location POINT NOT NULL,
+  date_created TIMESTAMP NOT NULL DEFAULT Now(),
+  last_updated TIMESTAMP NOT NULL DEFAULT Now(),
+  share_url VARCHAR(255),
+  active BOOLEAN NOT NULL DEFAULT TRUE,
+  thumbnail_url TEXT,
+  owner_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  map_id INTEGER REFERENCES maps(id) ON DELETE CASCADE
+);
