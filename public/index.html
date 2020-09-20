@@ -34,26 +34,26 @@
   </head>
   <body>
     <!-- Nav bar, indludes branding and all links to other page functions -->
-    <nav class="navbar navbar-light bg-success">
+    <nav id="main-nav" class="navbar navbar-light bg-success">
       <a class="navbar-brand" href="#">
         <img src="img/pynPoint_.png" width="120" height="40" alt="" loading="lazy">
       </a>
       <div id="nav-buttons" class="btn-group" role="group">
         <button id="view-create-map" class="btn-hover-white btn bg-primary" type="button">Create A Map!</button>
         <div class="btn-group" role="group">
-          <button id="btn-nav-maps" type="button" class="btn-hover-white btn bg-warning dropdown-toggle" data-toggle="dropdown">
+          <button type="button" class="btn-hover-white btn bg-warning dropdown-toggle" data-toggle="dropdown">
             View Maps
           </button>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">My Maps</a>
-            <a class="dropdown-item" href="#">Team Maps</a>
-            <a class="dropdown-item" href="#">Favorite Maps</a>
+            <a id="view-my-maps" class="dropdown-item" href="#">My Maps</a>
+            <a id="view-team-maps" class="dropdown-item" href="#">Team Maps</a>
+            <a id="view-favorite-map" class="dropdown-item" href="#">Favorite Maps</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Popular Maps</a>
+            <a id="view-popular-map" class="dropdown-item" href="#">Popular Maps</a>
           </div>
         </div>
         <!-- Profile contains user data and pynPoint settings -->
-        <button class="btn-hover-white btn bg-info" type="button">Profile</button>
+        <button id="view-profile" class="btn-hover-white btn bg-info" type="button">Profile</button>
         <button class="btn-hover-white btn bg-danger" type="button">Logout</button>
       </div>
     </nav>
@@ -62,27 +62,18 @@
       <!-- Contains the map frame to create a new map -->
       <div id="container-create-map">
         <div id="new-map-frame">
-          <ul class="nav nav-tabs">
-            <li class="nav-item">
-              <!-- This is the map frame tab-->
-              <a class="nav-link active" href="#">Map</a>
-            </li>
-            <li class="nav-item">
-              <!-- This is the drawn points tab -->
-              <!-- this will let the user change metadata, coords, etc of each point -->
-              <a class="nav-link" href="#">Map Points</a>
-            </li>
-            <li class="nav-item">
-              <!-- Here will go teams, privacy, and sharing settings -->
-              <a class="nav-link" href="#">Map Settings</a>
-            </li>
-          </ul>
+          <nav class="nav">
+            <a class="nav-link active">Map</a>
+            <a class="nav-link">Map Points</a>
+            <a class="nav-link">Map Settings</a>
+          </nav>
           <div id="map-frame">
           </div>
         </div>
       </div>
       <!-- view my maps, team maps, fav maps, and popular maps (most favorites) if public -->
       <div id="container-view-maps">
+        <h1>Your Maps</h1>
       </div>
       <!-- view/set user settings, includes user details and settings
       change page settings (default maps to hidden, -->
@@ -93,6 +84,9 @@
       <div id="container-login">
         <h1>Welcome to pynPoint!<h1>
         <h4>Please login to start creating maps!</h4>
+        <div class="text-center">
+          <button href="" type="button" class="btn bg-success btn-lg btn-hover-white" data-toggle="modal" data-target="#modalLoginForm">Login</button>
+        </div>
         <!-- login modal -->
         <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -125,9 +119,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="text-center">
-          <button href="" type="button" class="btn bg-success btn-lg btn-hover-white" data-toggle="modal" data-target="#modalLoginForm">Login</button>
         </div>
       </div>
     </div>

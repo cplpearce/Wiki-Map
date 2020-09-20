@@ -1,12 +1,13 @@
-const userViews = [
-  'container-create-map',
-  'container-view-maps',
-  'container-profile'
-]
+// Manage SPA page views
 $( document ).ready(function() {
+  // Set all the pynPoint divs to hidden at load
+  $( '#pynPoint-container' ).children().css('display', 'none');
+  // If there's no cookie, render the login page
+  $( '#container-login' ).css('display', 'flex');
   // View manager
-  $( '#view-create-map' ).click(() => {
-    userViews.forEach((view) => $( `#${view}` ).fadeOut("slow" ));
-    console.log('s')
+  $( "[id|='view']" ).click(function() {
+    // Fade all the divs
+    $( '#pynPoint-container' ).children().css('display', 'none');
+    $( `#container-${this.id.split('-').slice(1).join('-')}` ).css('display', 'flex');
   });
 });

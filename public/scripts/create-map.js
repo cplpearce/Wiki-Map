@@ -11,10 +11,14 @@ $( document ).ready(function() {
   map.addLayer(layer);
 
   map.on('click', (event) => {
-      const coord = event.latlng.toString().split(',');
-      const lat = coord[0].split('(');
-      const lon = coord[1].split(')');
-      alert(`You clicked the map at latitude ${lat[1]} and longitude ${lon[0]}`);
-      // Create a server function to pass the point to the DB
+    const coord = event.latlng.toString().split(',');
+    const lat = coord[0].split('(');
+    const lon = coord[1].split(')');
+    alert(`You clicked the map at latitude ${lat[1]} and longitude ${lon[0]}`);
+    // TODO: Create a server function to pass the point to the DB
+  });
+  // Without this, the map won't re-size if the display is set to none||hidden
+  $( '#nav-buttons' ).children().click(() => {
+    map.invalidateSize();
   });
 });
