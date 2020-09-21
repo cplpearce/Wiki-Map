@@ -70,12 +70,69 @@
       <!-- Contains the map frame to create a new map -->
       <div id="container-create-map">
         <div id="map-frame">
-          <div class="leaflet-right" id="create-map-toolbar">
-            <div class="btn-group" role="toolbar" aria-label="Basic example">
+          <div id="create-map-toolbar">
+            <div class="btn-group" role="toolbar">
               <button type="button" class="btn btn-primary">Place Points</button>
-              <button type="button" class="btn btn-warning">Edit Points</button>
-              <button type="button" class="btn btn-info">Map Settings</button>
+              <button id="map-points-btn" type="button" data-toggle="modal" data-target="#map-points-modal" class="btn btn-warning">Edit Points</button>
+              <button id="map-settings-btn" type="button" data-toggle="modal" data-target="#map-settings-modal" class="btn btn-info">Map Settings</button>
               <button type="button" class="btn btn-danger"><strong>Done!</strong></button>
+            </div>
+          </div>
+        </div>
+        <!-- Modal for map points -->
+        <div class="modal fade" id="map-points-modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Placed Points</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                  <span>&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <table id="map-points-table" class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Latitude</th>
+                      <th scope="col">Longitude</th>
+                    </tr>
+                  </thead>
+                  <tbody id="map-points-table-body">
+                  </tbody>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal for map settings -->
+        <div class="modal fade" id="map-settings-modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Map Settings</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                  <span>&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="share-this-map">
+                  <label class="custom-control-label" for="share-this-map">Make map public?</label>
+                </div>
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="map-settings-add-team-members">Team Members</span>
+                </div>
+                <input id="map-settings-add-team-members" type="username" autocomplete="off" class="form-control" placeholder="Comma Separated List of Usernames">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
             </div>
           </div>
         </div>
@@ -107,8 +164,8 @@
           <h6>Map Privacy</h6>
           <div class="input-group d-flex justify-content-center">
             <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="customSwitch1">
-              <label class="custom-control-label" for="customSwitch1">Share Maps By Default?</label>
+              <input type="checkbox" class="custom-control-input" id="share-maps-default">
+              <label class="custom-control-label" for="share-maps-default">Share Maps By Default?</label>
             </div>
           </div>
         </div>
