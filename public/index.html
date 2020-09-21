@@ -72,30 +72,32 @@
         <div id="map-frame">
           <div id="create-map-toolbar">
             <div class="btn-group" role="toolbar">
-              <button type="button" class="btn btn-primary">Place Points</button>
+              <button type="button" class="btn btn-primary"><strong>Done!</strong></button>
               <button id="map-points-btn" type="button" data-toggle="modal" data-target="#map-points-modal" class="btn btn-warning">Edit Points</button>
               <button id="map-settings-btn" type="button" data-toggle="modal" data-target="#map-settings-modal" class="btn btn-info">Map Settings</button>
-              <button type="button" class="btn btn-danger"><strong>Done!</strong></button>
+              <button id="map-clear-points-btn" type="button" class="btn btn-danger">Clear Markers</button>
             </div>
           </div>
         </div>
         <!-- Modal for map points -->
         <div class="modal fade" id="map-points-modal" tabindex="-1" role="dialog">
-          <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Placed Points</h5>
+                <h5 class="modal-title">Edit Points</h5>
                 <button type="button" class="close" data-dismiss="modal">
                   <span>&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                <table id="map-points-table" class="table">
-                  <thead>
+                <table id="map-points-table" class="table table-striped table-hover">
+                  <thead class="thead-dark">
                     <tr>
-                      <th scope="col">#</th>
+                      <th scope="col">Point Number</th>
                       <th scope="col">Latitude</th>
                       <th scope="col">Longitude</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Description</th>
                     </tr>
                   </thead>
                   <tbody id="map-points-table-body">
@@ -103,7 +105,7 @@
                 </table>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="modal-view-points-save" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
               </div>
             </div>
           </div>
