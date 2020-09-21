@@ -1,6 +1,22 @@
 const express = require('express');
 const router  = express.Router();
 
+const addNewPoint = (point, db) => { //TAKES AN OBJECT WITH INFO ABOUT THE POINT
+
+  const map_id = 1; /// point.map_id;
+  const user_id = 1; //point.[some clue about the user]
+  const title = "Ipsum cafe"; // point.body
+  const desc = "Ipsum is good"; // point.body
+  const markerPos = '(50, 50)'; // point.body
+  const thumbnailUrl = "https://picsum.photos/200"; //point.body
+
+  return db.query(`
+  INSERT INTO markers (owner_id, map_id, title, description, location, thumbnail_url)
+  VALUES (${user_id}, ${map_id}, $1, $2, point${markerPos}, '${thumbnailUrl}')
+  RETURNING *
+  `, [`${title}`, `${desc}`]);
+};
+
 module.exports = (db) => {
 
   ////////////////////
@@ -39,6 +55,31 @@ module.exports = (db) => {
       });
   });
 
+
+  ///Creat new map
+
+  router.post("/", (req, res) => {
+    const mapTitle = "Ipsmap"; /// req.body
+    const user_id = 1; //req.[some clue about the user]
+    db.query(
+      `INSERT INTO maps (title, user_id)
+       VALUES ($1, ${user_id})
+       RETURNING *;`,
+      [mapTitle])
+      .then(data => {
+        const newMap = data.rows;
+        res.json(newMap);
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
+
+
+
+
   router.post("/:id/favorite", (req, res) => {
     const map_id = req.params.id;
     const user_id = 1; //req.[some clue about the user]
@@ -59,27 +100,43 @@ module.exports = (db) => {
       });
   });
 
+  router.delete("/:map_id", (req, res) => {
+    const { map_id } = req.params;
+
+    db.query(`
+    UPDATE maps
+    SET active = false
+    WHERE id = ${map_id}
+    RETURNING id, title, active;
+    `)
+      .then(data => {
+        const delMap = data.rows;
+        res.json(delMap);
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
+
   ////////////////////////
   /// Marker specific ///
   ////////////////////////
 
   router.post("/:map_id/markers/", (req, res) => {
-    ////Wrapped in a loop
-    const map_id = req.params.map_id;
-    const user_id = 1; //req.[some clue about the user]
-    const title = "Ipsum cafe"; // req.body
-    const desc = "Ipsum is good"; // req.body
-    const markerPos = '(50, 50)'; // req.body
-    const thumbnailUrl = "https://picsum.photos/200"; //req.body
 
-    db.query(`
-    INSERT INTO markers (owner_id, map_id, title, description, location, thumbnail_url)
-    VALUES (${user_id}, ${map_id}, $1, $2, point${markerPos}, '${thumbnailUrl}')
-    RETURNING *
-    `, [`${title}`, `${desc}`])
+    const point = {
+      ////Object [point] crafted here from [req]
+    };
+
+
+
+    ////Wrapped in a loop
+    addNewPoint(point, db) ///METTONS
       .then(data => {
-        const newMatch = data.rows;
-        res.json(newMatch);
+        const newPoints = data.rows;
+        res.json(newPoints);
       })
       .catch(err => {
         res
@@ -100,8 +157,8 @@ module.exports = (db) => {
     RETURNING id, title, ${column};
     `, [newVal])
       .then(data => {
-        const newMatch = data.rows;
-        res.json(newMatch);
+        const uptMarker = data.rows;
+        res.json(uptMarker);
       })
       .catch(err => {
         res
@@ -120,8 +177,8 @@ module.exports = (db) => {
     RETURNING id, title, active;
     `)
       .then(data => {
-        const newMatch = data.rows;
-        res.json(newMatch);
+        const delMarker = data.rows;
+        res.json(delMarker);
       })
       .catch(err => {
         res
