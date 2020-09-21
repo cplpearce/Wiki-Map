@@ -14,6 +14,8 @@ $( document ).ready(function() {
       name: 'My new Map',
   });
 
+  // Add the locate me button
+  L.control.locate().addTo(map);
   // Allow a custom cursor over map
   L.DomUtil.addClass(map._container,'marker-cursor-enabled');
 
@@ -30,18 +32,19 @@ $( document ).ready(function() {
   // Create a point when dblclicking basemap
   // Create a modal and fill in the basic data
   map.on('dblclick', (event) => {
-    const marker = new L.marker(event.latlng, {pointNumber: pointCount, title: 'None Yet', description: 'None Yet', draggable: true}).addTo(markerGroup);
+    const marker = new L.marker(event.latlng, {pointNumber: pointCount, title: '', description: '', draggable: true}).addTo(markerGroup);
     marker.bindPopup(`
     <div id="marker-popup-div-${marker.options.pointNumber}" class="d-flex justify-content-center flex-column">
-      <strong>Name:</strong>
-      <p>${marker.options.title}</p>
-      <strong>Description:</strong>
-      <p>${marker.options.description}</p>
+      <strong>Name: ${marker.options.title}</strong>
+      <strong>Description: ${marker.options.description}</strong>
+      <strong>Latitude: ${marker._latlng.lat.toFixed(5)}</strong>
+      <strong>Longitude: ${marker._latlng.lng.toFixed(5)}</strong>
     </div>
-    `).bindTooltip(`Point: ${marker.options.pointNumber}`,
+    `);
+    marker.bindTooltip(`Point: ${marker.options.pointNumber}`,
     {
         permanent: true,
-        direction: 'right'
+        direction: 'right',
     });
 
     // Set a popup on mouseover
@@ -50,11 +53,15 @@ $( document ).ready(function() {
       <div id="marker-popup-div-${marker.options.pointNumber}" class="d-flex justify-content-center flex-column">
         <strong>Name: ${marker.options.title}</strong>
         <strong>Description: ${marker.options.description}</strong>
+        <strong>Latitude: ${marker._latlng.lat.toFixed(5)}</strong>
+        <strong>Longitude: ${marker._latlng.lng.toFixed(5)}</strong>
       </div>
       `);
       marker.openPopup();
     });
-
+    marker.on('mouseout', () => {
+      marker.closePopup();
+    });
     // Increment the pointCount
     pointCount += 1;
     // TODO: Create a server function to pass the point to the DB
@@ -68,14 +75,14 @@ $( document ).ready(function() {
   // View all the user points
   $( '#map-points-btn' ).click(function() {
     $( '#map-points-table-body' ).empty();
-    markerGroup.eachLayer(function(point) {
+    markerGroup.eachLayer(function(marker) {
       $( '#map-points-table-body' ).append(`
         <tr>
-        <td scope="row">${point.options.pointNumber}</th>
-        <td>${point._latlng.lat.toFixed(5)}</td>
-        <td>${point._latlng.lng.toFixed(5)}</td>
-        <td><input vaue="${point.options.title}" class="point-edit-ta" id="point-${point.options.pointNumber}-title"></input></td>
-        <td><textarea class="point-edit-ta" id="point-${point.options.pointNumber}-description">${point.options.description}</textarea></td>
+        <td scope="row">${marker.options.pointNumber}</th>
+        <td>${marker._latlng.lat.toFixed(5)}</td>
+        <td>${marker._latlng.lng.toFixed(5)}</td>
+        <td><input value="${marker.options.title}" class="point-edit-ta" id="point-${marker.options.pointNumber}-title"></input></td>
+        <td><textarea class="point-edit-ta" id="point-${marker.options.pointNumber}-description">${marker.options.description}</textarea></td>
         </tr>
       `);
     });
@@ -83,21 +90,16 @@ $( document ).ready(function() {
 
   // Update all point titles/descriptions when the edit points modal is *saved*
   $( '#modal-view-points-save' ).click(() => {
-    markerGroup.eachLayer(function(point) {
-      point.options.title = $( `#point-${point.options.pointNumber}-title` ).val();
-      point.options.description = $( `#point-${point.options.pointNumber}-description` ).val();
+    markerGroup.eachLayer(function(marker) {
+      marker.options.title = $( `#point-${marker.options.pointNumber}-title` ).val();
+      marker.options.description = $( `#point-${marker.options.pointNumber}-description` ).val()
     });
   });
 
   // Clear all points off map button
   $( '#map-clear-points-btn' ).click(() => {
+    pointCount = 1;
     markerGroup.clearLayers();
   });
-
-  $ ( '#main-nav' ).click(function() {
-    markerGroup.eachLayer(function(point) {
-      console.log(point)
-    });
-  })
 });
 
