@@ -35,40 +35,48 @@
   <body>
     <!-- Nav bar, indludes branding and all links to other page functions -->
     <nav id="main-nav" class="navbar navbar-light bg-success">
+      <!-- Logo -->
       <a class="navbar-brand" href="#">
         <img src="img/pynPoint_.png" width="120" height="40" alt="" loading="lazy">
       </a>
       <div id="nav-buttons" class="btn-group" role="group">
-        <button id="view-create-map" class="btn-hover-white btn bg-primary" type="button">Create A Map!</button>
+        <!-- Create map button -->
+        <button id="view-create-map" class="btn btn-primary" type="button">Create A Map!</button>
+        <!-- View maps button group -->
         <div class="btn-group" role="group">
-          <button type="button" class="btn-hover-white btn bg-warning dropdown-toggle" data-toggle="dropdown">
+          <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
             View Maps
           </button>
           <div id="view-view-maps" class="dropdown-menu">
+            <!-- Maps the user has created -->
             <a class="dropdown-item" href="#">My Maps</a>
+            <!-- Maps that the user's team has worked on -->
             <a class="dropdown-item" href="#">Team Maps</a>
+            <!-- Maps that the user has favorited -->
             <a class="dropdown-item" href="#">Favorite Maps</a>
             <div class="dropdown-divider"></div>
+            <!-- Maps the community has most favorited -->
             <a id="view-popular-map" class="dropdown-item" href="#">Popular Maps</a>
           </div>
         </div>
-        <!-- Profile contains user data and pynPoint settings -->
-        <button id="view-profile" class="btn-hover-white btn bg-info" type="button">Profile</button>
-        <button class="btn-hover-white btn bg-danger" type="button">Logout</button>
+        <!-- Profile contains user data and pynPoint settings button -->
+        <button id="view-profile" class="btn btn-info" type="button">Profile</button>
+        <!-- Logout button -->
+        <button class="btn btn-danger" type="button">Logout</button>
       </div>
     </nav>
     <!-- These containers house the various pages of pynPoint -->
     <div id="pynPoint-container">
       <!-- Contains the map frame to create a new map -->
       <div id="container-create-map">
-        <div id="create-map-frame">
-          <div class="btn-group" role="toolbar" aria-label="Basic example">
-            <button type="button" class="btn btn-info">Place Points</button>
-            <button type="button" class="btn btn-warning">Edit Points</button>
-            <button type="button" class="btn btn-secondary">Map Settings</button>
-            <button type="button" class="btn btn-primary"><strong>Done!</strong></button>
-          </div>
-          <div id="map-frame">
+        <div id="map-frame">
+          <div class="leaflet-right" id="create-map-toolbar">
+            <div class="btn-group" role="toolbar" aria-label="Basic example">
+              <button type="button" class="btn btn-primary">Place Points</button>
+              <button type="button" class="btn btn-warning">Edit Points</button>
+              <button type="button" class="btn btn-info">Map Settings</button>
+              <button type="button" class="btn btn-danger"><strong>Done!</strong></button>
+            </div>
           </div>
         </div>
       </div>

@@ -10,6 +10,12 @@ $( document ).ready(function() {
   });
   L.DomUtil.addClass(map._container,'marker-cursor-enabled');
   map.addLayer(layer);
+  // Make sure our toolbar is clickable
+  const toolbar = L.DomUtil.get('create-map-toolbar');
+
+  // Don't drop a point if user clicks the toolbar
+  L.DomEvent.on(toolbar, 'mousewheel', L.DomEvent.stopPropagation);
+  L.DomEvent.on(toolbar, 'click', L.DomEvent.stopPropagation);
 
   map.on('click', (event) => {
     const coord = event.latlng.toString().split(',');
