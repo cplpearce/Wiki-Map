@@ -1,29 +1,25 @@
 INSERT INTO users (name, email, password, location)
 VALUES
-('Christeen Pepe', 'rgarton@sbcglobal.net', 'password', point(3.08, 113.16) ),
-('Liza Dall', 'balchen@msn.com', 'password', point(25.15, 55.18) ),
-('Kaye Donmoyer', 'telbij@mac.com', 'password', point(46.49, 100.47) ),
-('Shari Coon', 'lbaxter@msn.com', 'password', point(40.49, 140.45) ),
-('Randee Krall', 'ahuillet@msn.com', 'password', point(22.15, 97.52) ),
-('Darren Wever', 'jemarch@yahoo.ca', 'password', point(3.06, 60.01) ),
-('Nanci Ferreira', 'raines@live.com', 'password', point(38.38, 90.12) ),
-('Edra Maffei', 'timlinux@icloud.com', 'password', point(45.52, 170.30) ),
-('Marvella Bemis', 'jaarnial@yahoo.com', 'password', point(36.38, 101.46) ),
-('Kena Ober', 'pgolle@aol.com', 'password', point(40.13, 74.46) ),
-('Sanda Marcano', 'british@att.net', 'password', point(52.29, 1.54) ),
-('Thresa Allgeier', 'ilikered@live.com', 'password', point(12.31, 70.02) ),
-('Georgeann Cast', 'bogjobber@yahoo.ca', 'password', point(9.40, 35.44) ),
-('Laurette Galvin', 'crowl@outlook.com', 'password', point(42.17, 83.00) ),
-('Carrol Rodela', 'jbuchana@icloud.com', 'password', point(58.00, 56.19) ),
-('Coralee Stlouis', 'sequin@mac.com', 'password', point(36.51, 75.59) ),
-('Catherin Venema', 'gfxguy@gmail.com', 'password', point(67.33, 133.23) ),
-('Yee Deblois', 'retoh@aol.com', 'password', point(63.06, 21.37) ),
-('Nichole Zepeda', 'staffelb@hotmail.com', 'password', point(6.22, 2.26) ),
-('Lino Boyland', 'tskirvin@gmail.com', 'password', point(46.08, 64.46) );
-
-
-
-
+('Christeen Pepe', 'rgarton@sbcglobal.net', 'password', point(-23.54, 29.27) ),
+('Liza Dall', 'balchen@msn.com', 'password', point(18.31, 73.51) ),
+('Kaye Donmoyer', 'telbij@mac.com', 'password', point(41.35, -93.37) ),
+('Shari Coon', 'lbaxter@msn.com', 'password', point(-18.08, 178.27) ),
+('Randee Krall', 'ahuillet@msn.com', 'password', point(78.13, 15.39) ),
+('Darren Wever', 'jemarch@yahoo.ca', 'password', point(37.49, -25.45) ),
+('Nanci Ferreira', 'raines@live.com', 'password', point(53.54, 27.34) ),
+('Edra Maffei', 'timlinux@icloud.com', 'password', point(42.51, -2.41) ),
+('Marvella Bemis', 'jaarnial@yahoo.com', 'password', point(50.50, -0.09) ),
+('Kena Ober', 'pgolle@aol.com', 'password', point(41.49, 123.25) ),
+('Sanda Marcano', 'british@att.net', 'password', point(-7,16, 112,45) ),
+('Thresa Allgeier', 'ilikered@live.com', 'password', point(26,17, 50,12) ),
+('Georgeann Cast', 'bogjobber@yahoo.ca', 'password', point(50,49, -1,05) ),
+('Laurette Galvin', 'crowl@outlook.com', 'password', point(20,58, -89,37) ),
+('Carrol Rodela', 'jbuchana@icloud.com', 'password', point(25,34, 91,53) ),
+('Coralee Stlouis', 'sequin@mac.com', 'password', point(6,27, 7,31) ),
+('Catherin Venema', 'gfxguy@gmail.com', 'password', point(38,11, 15,33) ),
+('Yee Deblois', 'retoh@aol.com', 'password', point(38,33, -121,28) ),
+('Nichole Zepeda', 'staffelb@hotmail.com', 'password', point(6,07, 100,22) ),
+('Lino Boyland', 'tskirvin@gmail.com', 'password', point(-8,33, 125,35) );
 
 
 
