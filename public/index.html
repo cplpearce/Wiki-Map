@@ -44,10 +44,10 @@
           <button type="button" class="btn-hover-white btn bg-warning dropdown-toggle" data-toggle="dropdown">
             View Maps
           </button>
-          <div class="dropdown-menu">
-            <a id="view-my-maps" class="dropdown-item" href="#">My Maps</a>
-            <a id="view-team-maps" class="dropdown-item" href="#">Team Maps</a>
-            <a id="view-favorite-map" class="dropdown-item" href="#">Favorite Maps</a>
+          <div id="view-view-maps" class="dropdown-menu">
+            <a class="dropdown-item" href="#">My Maps</a>
+            <a class="dropdown-item" href="#">Team Maps</a>
+            <a class="dropdown-item" href="#">Favorite Maps</a>
             <div class="dropdown-divider"></div>
             <a id="view-popular-map" class="dropdown-item" href="#">Popular Maps</a>
           </div>
@@ -66,6 +66,7 @@
             <a class="nav-link active">Map</a>
             <a class="nav-link">Map Points</a>
             <a class="nav-link">Map Settings</a>
+            <a class="nav-link "><strong>Finished!</strong></a>
           </nav>
           <div id="map-frame">
           </div>
@@ -73,11 +74,34 @@
       </div>
       <!-- view my maps, team maps, fav maps, and popular maps (most favorites) if public -->
       <div id="container-view-maps">
+        <div id="view-maps"></div>
         <h1>Your Maps</h1>
       </div>
       <!-- view/set user settings, includes user details and settings
       change page settings (default maps to hidden, -->
       <div id="container-profile">
+        <div id="profile-settings">
+          <h3>Change User Settings</h3>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Password</span>
+            </div>
+            <input type="password" class="form-control" placeholder="Password">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Password</span>
+            </div>
+            <input type="password" class="form-control" placeholder="Confirm">
+          </div>
+          <h3>Change Default Map Settings</h3>
+          <div class="input-group mb-3 col-xs-2 col-xs-offset-4">
+            <input id="maps-shared-by-default" class="form-check-input" type="checkbox" value="">
+            <label class="form-check-label" for="maps-shared-by-default">
+              Share New Maps by Default?
+            </label>
+          </div>
+        </div>
       </div>
       <!-- default page, if cookie is not detected on root route present login
       otherwise show landing page (My Maps) -->
@@ -101,7 +125,7 @@
                 <div class="md-form mb-5">
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon1">@Email</span>
+                      <span class="input-group-text" id="basic-addon1">Username</span>
                     </div>
                     <input type="text" class="form-control" placeholder="Username">
                   </div>
