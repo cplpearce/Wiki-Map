@@ -33,5 +33,25 @@ module.exports = (db) => {
           .json({ error: err.message });
       });
   });
+
+  router.post("/:id/favorite", (req, res) => {
+    const map_id = req.params.id;
+    const user_id = 1; //req.[some clue about the user]
+
+    db.query(`
+    INSERT INTO favorite_maps (user_id, map_id)
+    VALUES (${user_id}, ${map_id})
+    RETURNING*;
+    `)
+      .then(data => {
+        const newMatch = data.rows;
+        res.json(newMatch);
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
   return router;
 };
