@@ -26,6 +26,8 @@
     <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles/custom.css">
+    <link rel="stylesheet" href="styles/create-map.css">
+    <link rel="stylesheet" href="styles/view-maps.css">
     <!-- Custom general js -->
     <script src="scripts/client.js"></script>
     <!-- These js files control each page of the SPA -->
@@ -40,9 +42,8 @@
     <title>PynPoint</title>
   </head>
   <body>
-
     <!-- Nav bar, indludes branding and all links to other page functions -->
-    <nav id="main-nav" class="navbar navbar-light bg-success">
+    <nav id="main-nav" class="navbar navbar-light bg-dark">
       <!-- Logo -->
       <a class="navbar-brand" href="#">
         <img src="img/pynPoint_.png" width="120" height="40" alt="" loading="lazy">
@@ -82,7 +83,7 @@
         <div id="map-frame">
           <div id="create-map-toolbar">
             <div class="btn-group" role="toolbar">
-              <button type="button" class="btn btn-primary"><strong>Done!</strong></button>
+              <button id="map-post-btn" type="button" class="btn btn-primary"><strong>Done!</strong></button>
               <button id="map-points-btn" type="button" data-toggle="modal" data-target="#map-points-modal" class="btn btn-warning">Edit Points</button>
               <button id="map-settings-btn" type="button" data-toggle="modal" data-target="#map-settings-modal" class="btn btn-info">Map Settings</button>
               <button id="map-clear-points-btn" type="button" class="btn btn-danger">Clear Markers</button>
@@ -134,16 +135,23 @@
                 </button>
               </div>
               <div class="modal-body">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="map-settings-add-team-members">Map Name</span>
+                  </div>
+                  <input id="map-settings-name" type="text" autocomplete="off" class="form-control" placeholder="My New Map!">
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="map-settings-add-team-members">Teammates</span>
+                  </div>
+                  <input id="map-settings-add-team-members" type="username" autocomplete="off" class="form-control" placeholder="Comma Separated List of Usernames">
+                </div>
                 <div class="custom-control custom-switch">
                   <input type="checkbox" class="custom-control-input" id="share-this-map">
                   <label class="custom-control-label" for="share-this-map">Make map public?</label>
                 </div>
-              </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="map-settings-add-team-members">Team Members</span>
-                </div>
-                <input id="map-settings-add-team-members" type="username" autocomplete="off" class="form-control" placeholder="Comma Separated List of Usernames">
+                <br>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -155,8 +163,27 @@
 
       <!-- view my maps, team maps, fav maps, and popular maps (most favorites) if public -->
       <div id="container-view-maps">
-        <div id="view-maps"></div>
-        <h1>Your Maps</h1>
+        <div id="view-maps-wrapper">
+        </div>
+        <!-- Map editor modal -->
+        <div class="modal fade" id="map-editor-modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl map-editor-modal-dialog" role="document">
+            <div class="modal-content map-editor-modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit Points</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                  <span>&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <!-- Views/Edits -->
+              </div>
+              <div class="modal-footer">
+                <button id="modal-view-points-save" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- view/set user settings, includes user details and settings

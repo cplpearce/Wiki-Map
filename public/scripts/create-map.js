@@ -119,5 +119,14 @@ $( document ).ready(function() {
     pointCount = 1;
     markerGroup.clearLayers();
   });
+
+  // POST map to server
+  $( '#map-post-btn' ).click(function() {
+    const postData = {}
+    console.log(markerGroup.getLayers())
+    //$.post( "ajax/test.html", function( data ) {
+    //  $( ".result" ).html( data );
+    //});
+  })
 });
 
