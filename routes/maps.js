@@ -1,20 +1,31 @@
 const express = require('express');
 const router  = express.Router();
 
-const addNewPoint = (point, db) => { //TAKES AN OBJECT WITH INFO ABOUT THE POINT
+const addNewMarkers = (newMarkers, map_id, db) => {
+  const insertedMarkers = [];
+  for (const marker of newMarkers) {
+    const user_id = 1;
+    const title = marker.name;
+    const desc = marker.description;
+    const markerPos = `(${marker.lat}, ${marker.long})`;
+    const thumbnailUrl = marker.thumbnailUrl;
 
-  const map_id = 1; /// point.map_id;
-  const user_id = 1; //point.[some clue about the user]
-  const title = "Ipsum cafe"; // point.body
-  const desc = "Ipsum is good"; // point.body
-  const markerPos = '(50, 50)'; // point.body
-  const thumbnailUrl = "https://picsum.photos/200"; //point.body
+    db.query(`
+    INSERT INTO markers (owner_id, map_id, title, description, location, thumbnail_url)
+    VALUES (${user_id}, ${map_id}, $1, $2, point${markerPos}, '${thumbnailUrl}')
+    RETURNING *;`
+    , [`${title}`, `${desc}`])
+      .then((insertedMarker) => {
+        insertedMarkers.push(insertedMarker);
+      });
+  }
+  return insertedMarkers;
+};
 
+const getMapById = (id, db) => {
   return db.query(`
-  INSERT INTO markers (owner_id, map_id, title, description, location, thumbnail_url)
-  VALUES (${user_id}, ${map_id}, $1, $2, point${markerPos}, '${thumbnailUrl}')
-  RETURNING *
-  `, [`${title}`, `${desc}`]);
+  SELECT * FROM maps WHERE id = ${id};
+  `);
 };
 
 module.exports = (db) => {
@@ -61,15 +72,20 @@ module.exports = (db) => {
   router.post("/", (req, res) => {
     const mapTitle = "Ipsmap"; /// req.body
     const user_id = 1; //req.[some clue about the user]
+    const private = false; //req.body
     db.query(
-      `INSERT INTO maps (title, user_id)
-       VALUES ($1, ${user_id})
+      `INSERT INTO maps (title, user_id, private)
+       VALUES ($1, ${user_id}, ${private})
        RETURNING *;`,
       [mapTitle])
       .then(data => {
-        const newMap = data.rows;
+        addNewMarkers(req.body.map.markers);////// mettons
+        return data;
+      }).then(data => {
+        const newMap = getMapById(data.rows[0].id);///// mettons
         res.json(newMap);
-      })
+      }
+      )
       .catch(err => {
         res
           .status(500)
@@ -126,23 +142,23 @@ module.exports = (db) => {
 
   router.post("/:map_id/markers/", (req, res) => {
 
-    const point = {
-      ////Object [point] crafted here from [req]
-    };
+    // const point = {
+    //   ////Object [point] crafted here from [req]
+    // };
 
 
 
-    ////Wrapped in a loop
-    addNewPoint(point, db) ///METTONS
-      .then(data => {
-        const newPoints = data.rows;
-        res.json(newPoints);
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
-      });
+    // ////Wrapped in a loop
+    // addNewPoint(point, db) ///METTONS
+    //   .then(data => {
+    //     const newPoints = data.rows;
+    //     res.json(newPoints);
+    //   })
+    //   .catch(err => {
+    //     res
+    //       .status(500)
+    //       .json({ error: err.message });
+    //   });
   });
 
   router.put("/:map_id/markers/:marker_id", (req, res) => {
