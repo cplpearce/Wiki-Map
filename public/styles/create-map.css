@@ -1,0 +1,27 @@
+/* Create map container */
+#container-create-map {
+  height: 92vh;
+  width: 100%;
+}
+#create-map-toolbar {
+  position: absolute;
+  pointer-events: auto;
+  z-index: 5000;
+  left: 60px;
+  top: 20px;
+}
+#map-frame {
+  width: 100%;
+  min-width: 280px;
+  height: 100%;
+  min-height: 300px;
+}
+#map-settings-add-team-members {
+  border-radius: 0;
+}
+.point-image {
+  max-width: 200px;
+  max-height: 200px;
+  width: 200px;
+  height: 200px;
+}

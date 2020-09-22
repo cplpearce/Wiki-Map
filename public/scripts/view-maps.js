@@ -20,7 +20,7 @@ $( document ).ready(function() {
   // Get my maps
   $.get( "/maps", function(data) {
     Object.values(data.maps).forEach((map) => {
-      $( '#view-maps-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created));
+      $( '#maps-viewer-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created));
       // WHERE user_id === cookie
     });
   });

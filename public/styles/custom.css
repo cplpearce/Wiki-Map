@@ -1,0 +1,70 @@
+/* Elements */
+html {
+  cursor: url(../img/cursor/pin-svg.svg), auto;
+}
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'Oswald', 'Courier New', Courier, monospace;
+}
+body, p, span, div, strong {
+  font-family: 'Ubuntu Condensed', 'Courier New', Courier, monospace;
+}
+.table > tbody > tr > td {
+  vertical-align: middle;
+  text-align: center;
+}
+/* Classes */
+.navbar-brand {
+  filter: invert(1);
+}
+.modal {
+  z-index: 10000;
+}
+.form-control {
+  text-align: center;
+}
+/* General ids */
+#pynPoint-container {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+#login-launch-modal {
+  font-size: x-large;
+}
+#main-nav {
+  height: 8vh;
+}
+/* Profile container */
+#container-profile {
+  display: none;
+  margin-top: 20vh;
+}
+#profile-settings {
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+/* Login container */
+#container-login {
+  margin-top: 20vh;
+  display: none;
+  align-items: center;
+  align-content: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Animations */
+
+/* UI tweaks */
+.leaflet-container.marker-cursor-enabled {
+  cursor: url(../img/cursor/pin-svg.svg), auto;
+}
