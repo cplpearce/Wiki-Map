@@ -134,7 +134,7 @@ $( document ).ready(function() {
     const postNewMapData = {};
     postNewMapData.points = markerGroup.getLayers().map((marker) => {
       return {
-        name: marker.options.name,
+        title: marker.options.title,
         description: marker.options.description,
         url: marker.options.image,
         lat: marker._latlng.lat,
@@ -143,6 +143,7 @@ $( document ).ready(function() {
     });
     postNewMapData.map_name = $( '#map-settings-name' ).val();
     postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
+    console.log(postNewMapData)
     //$.post( "/maps", function(postNewMapData) {
       // Clear map
     //});
