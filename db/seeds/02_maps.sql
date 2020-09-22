@@ -1,13 +1,13 @@
-INSERT INTO maps (title, owner_id)
+INSERT INTO maps (title, owner_id, private)
 VALUES
 
-('Blessed of the Stars', 5),
-('Protector of Nations', 15),
-('Baron of the Desert', 16),
-('Director of Peace', 2),
-('Minister of Development', 6),
-('Earl of Law', 12),
-('Patriarch of Poison', 15),
-('Sensei of Light', 9),
-('Elder of Life', 20),
-('Cleric of the Arcane', 5)
+('Blessed of the Stars', 5, FALSE),
+('Protector of Nations', 15, FALSE),
+('Baron of the Desert', 16, FALSE),
+('Director of Peace', 2, FALSE),
+('Minister of Development', 6, FALSE),
+('Earl of Law', 12, TRUE),
+('Patriarch of Poison', 15, TRUE),
+('Sensei of Light', 9, TRUE),
+('Elder of Life', 20, TRUE),
+('Cleric of the Arcane', 5, TRUE);
