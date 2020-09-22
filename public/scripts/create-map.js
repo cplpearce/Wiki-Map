@@ -122,10 +122,19 @@ $( document ).ready(function() {
 
   // POST map to server
   $( '#map-post-btn' ).click(function() {
-    const postData = {}
-    console.log(markerGroup.getLayers())
-    //$.post( "ajax/test.html", function( data ) {
-    //  $( ".result" ).html( data );
+    const postNewMapData = {};
+    postNewMapData.points = markerGroup.getLayers().map((marker) => {
+      return {
+        name: marker.options.name,
+        description: marker.options.description,
+        lat: marker._latlng.lat,
+        lon: marker._latlng.lng,
+      }
+    });
+    postNewMapData.map_name = $( '#map-settings-name' ).val();
+    postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
+    //$.post( "/maps", function(postNewMapData) {
+      // Clear map
     //});
   })
 });
