@@ -16,6 +16,10 @@ $( document ).ready(function() {
 
   // Add the locate me button
   L.control.locate().addTo(map);
+
+  // Add the geocoder
+  L.Control.geocoder().addTo(map);
+
   // Allow a custom cursor over map
   L.DomUtil.addClass(map._container,'marker-cursor-enabled');
 
@@ -30,7 +34,6 @@ $( document ).ready(function() {
   map.addLayer(basemapLayer);
 
   // Create a point when dblclicking basemap
-  // Create a modal and fill in the basic data
   map.on('dblclick', (event) => {
     const marker = new L.marker(event.latlng, {pointNumber: pointCount, title: '', description: '', draggable: true}).addTo(markerGroup);
     marker.bindPopup(`
@@ -48,7 +51,7 @@ $( document ).ready(function() {
     });
 
     // Set a popup on mouseover
-    marker.on('mouseover',() => {
+    marker.on('mouseover', function() {
       marker.setPopupContent(`
       <div id="marker-popup-div-${marker.options.pointNumber}" class="d-flex justify-content-center flex-column">
         <strong>Name: ${marker.options.title}</strong>
@@ -57,13 +60,22 @@ $( document ).ready(function() {
         <strong>Longitude: ${marker._latlng.lng.toFixed(5)}</strong>
       </div>
       `);
-      marker.openPopup();
+      this.openPopup();
     });
+
+    // Close the popup on mouse out
     marker.on('mouseout', () => {
       marker.closePopup();
     });
+
+    // Ctrl click delete
+    marker.on('click', function(event) {
+      if (event.originalEvent.ctrlKey) {markerGroup.removeLayer(event.target)};
+    });
+
     // Increment the pointCount
     pointCount += 1;
+
     // TODO: Create a server function to pass the point to the DB
   });
 
@@ -78,11 +90,11 @@ $( document ).ready(function() {
     markerGroup.eachLayer(function(marker) {
       $( '#map-points-table-body' ).append(`
         <tr>
-        <td scope="row">${marker.options.pointNumber}</th>
-        <td>${marker._latlng.lat.toFixed(5)}</td>
-        <td>${marker._latlng.lng.toFixed(5)}</td>
-        <td><input value="${marker.options.title}" class="point-edit-ta" id="point-${marker.options.pointNumber}-title"></input></td>
-        <td><textarea class="point-edit-ta" id="point-${marker.options.pointNumber}-description">${marker.options.description}</textarea></td>
+          <td scope="row">${marker.options.pointNumber}</th>
+          <td>${marker._latlng.lat.toFixed(5)}</td>
+          <td>${marker._latlng.lng.toFixed(5)}</td>
+          <td><input value="${marker.options.title}" class="point-edit-ta" id="point-${marker.options.pointNumber}-title"></input></td>
+          <td><textarea class="point-edit-ta" id="point-${marker.options.pointNumber}-description">${marker.options.description}</textarea></td>
         </tr>
       `);
     });

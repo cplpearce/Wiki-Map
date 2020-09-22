@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+    <!-- Leaflet Geocoder -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <!-- Stamen js -->
     <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
     <!-- Custom CSS -->
@@ -71,6 +74,7 @@
     </nav>
     <!-- These containers house the various pages of pynPoint -->
     <div id="pynPoint-container">
+
       <!-- Contains the map frame to create a new map -->
       <div id="container-create-map">
         <div id="map-frame">
@@ -83,6 +87,7 @@
             </div>
           </div>
         </div>
+
         <!-- Modal for map points -->
         <div class="modal fade" id="map-points-modal" tabindex="-1" role="dialog">
           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
@@ -114,6 +119,7 @@
             </div>
           </div>
         </div>
+
         <!-- Modal for map settings -->
         <div class="modal fade" id="map-settings-modal" tabindex="-1" role="dialog">
           <div class="modal-dialog modal-dialog-centered" role="document">
