@@ -92,7 +92,7 @@
 
         <!-- Modal for map points -->
         <div class="modal fade" id="map-points-modal" tabindex="-1" role="dialog">
-          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title">Edit Points</h5>
@@ -109,6 +109,7 @@
                       <th class="text-center" scope="col">Longitude</th>
                       <th class="text-center" scope="col">Title</th>
                       <th class="text-center" scope="col">Description</th>
+                      <th class="text-center" scope="col">Image (URL)</th>
                     </tr>
                   </thead>
                   <tbody id="map-points-table-body">
@@ -151,11 +152,13 @@
           </div>
         </div>
       </div>
+
       <!-- view my maps, team maps, fav maps, and popular maps (most favorites) if public -->
       <div id="container-view-maps">
         <div id="view-maps"></div>
         <h1>Your Maps</h1>
       </div>
+
       <!-- view/set user settings, includes user details and settings
       change page settings (default maps to hidden, -->
       <div id="container-profile">
@@ -184,6 +187,7 @@
           </div>
         </div>
       </div>
+
       <!-- default page, if cookie is not detected on root route present login
       otherwise show landing page (My Maps) -->
       <div id="container-login">
@@ -215,7 +219,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">Password</span>
                   </div>
-                  <input type="text" class="form-control" placeholder="Username">
+                  <input type="password" class="form-control" placeholder="Password">
                 </div>
               </div>
               <div class="modal-footer d-flex justify-content-center">
@@ -226,6 +230,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </body>
 </html>
