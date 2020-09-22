@@ -41,20 +41,22 @@ body, p, span, div, strong {
 /* Profile container */
 #container-profile {
   display: none;
-  margin-top: 20vh;
+  margin-top: 30vh;
 }
 #profile-settings {
-  width: 50vw;
+  width: 20vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   align-content: center;
 }
-
+input.profile-settings {
+  left: 20px;
+}
 /* Login container */
 #container-login {
-  margin-top: 20vh;
+  margin-top: 30vh;
   display: none;
   align-items: center;
   align-content: center;

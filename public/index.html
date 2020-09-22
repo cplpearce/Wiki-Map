@@ -167,16 +167,17 @@
         </div>
         <!-- Map editor modal -->
         <div class="modal fade" id="map-editor-modal" tabindex="-1" role="dialog">
-          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl map-editor-modal-dialog" role="document">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
             <div class="modal-content map-editor-modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Edit Points</h5>
+                <h5 class="modal-title">Map Editor</h5>
                 <button type="button" class="close" data-dismiss="modal">
                   <span>&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                <!-- Views/Edits -->
+                <div id="map-edit-frame">
+                </div>
               </div>
               <div class="modal-footer">
                 <button id="modal-view-points-save" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
@@ -193,15 +194,9 @@
           <h3>Change User Settings</h3>
           <h6>Change Password</h6>
           <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">Password</span>
-            </div>
             <input type="password" class="form-control" placeholder="Password">
           </div>
           <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">Password</span>
-            </div>
             <input type="password" class="form-control" placeholder="Confirm">
           </div>
           <h3>Change Default Map Settings</h3>
@@ -212,6 +207,8 @@
               <label class="custom-control-label" for="share-maps-default">Share Maps By Default?</label>
             </div>
           </div>
+          <br>
+          <button type="button" class="btn btn-primary">Save</button>
         </div>
       </div>
 
