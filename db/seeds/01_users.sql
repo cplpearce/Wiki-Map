@@ -10,16 +10,16 @@ VALUES
 ('Edra Maffei', 'timlinux@icloud.com', 'password', point(42.51, -2.41) ),
 ('Marvella Bemis', 'jaarnial@yahoo.com', 'password', point(50.50, -0.09) ),
 ('Kena Ober', 'pgolle@aol.com', 'password', point(41.49, 123.25) ),
-('Sanda Marcano', 'british@att.net', 'password', point(-7,16, 112,45) ),
-('Thresa Allgeier', 'ilikered@live.com', 'password', point(26,17, 50,12) ),
-('Georgeann Cast', 'bogjobber@yahoo.ca', 'password', point(50,49, -1,05) ),
-('Laurette Galvin', 'crowl@outlook.com', 'password', point(20,58, -89,37) ),
-('Carrol Rodela', 'jbuchana@icloud.com', 'password', point(25,34, 91,53) ),
-('Coralee Stlouis', 'sequin@mac.com', 'password', point(6,27, 7,31) ),
-('Catherin Venema', 'gfxguy@gmail.com', 'password', point(38,11, 15,33) ),
-('Yee Deblois', 'retoh@aol.com', 'password', point(38,33, -121,28) ),
-('Nichole Zepeda', 'staffelb@hotmail.com', 'password', point(6,07, 100,22) ),
-('Lino Boyland', 'tskirvin@gmail.com', 'password', point(-8,33, 125,35) );
+('Sanda Marcano', 'british@att.net', 'password', point(-7.16, 112.45) ),
+('Thresa Allgeier', 'ilikered@live.com', 'password', point(26.17, 50.12) ),
+('Georgeann Cast', 'bogjobber@yahoo.ca', 'password', point(50.49, -1.05) ),
+('Laurette Galvin', 'crowl@outlook.com', 'password', point(20.58, -89.37) ),
+('Carrol Rodela', 'jbuchana@icloud.com', 'password', point(25.34, 91.53) ),
+('Coralee Stlouis', 'sequin@mac.com', 'password', point(6.27, 7.31) ),
+('Catherin Venema', 'gfxguy@gmail.com', 'password', point(38.11, 15.33) ),
+('Yee Deblois', 'retoh@aol.com', 'password', point(38.33, -121.28) ),
+('Nichole Zepeda', 'staffelb@hotmail.com', 'password', point(6.07, 100.22) ),
+('Lino Boyland', 'tskirvin@gmail.com', 'password', point(-8.33, 125.35) );
 
 
 
