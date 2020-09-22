@@ -1,7 +1,6 @@
 /* View maps container */
 #container-view-maps {
   display: none;
-
 }
 #maps-viewer-wrapper {
   display: flex;
