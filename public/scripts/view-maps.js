@@ -35,16 +35,16 @@ $( document ).ready(function() {
 
   // Get my maps on nav click
   $( "[id|='viewer']" ).click(function() {
+    const map_req_type = this.id.split('-').slice(1).join('_');
+    console.log(map_req_type)
     $.ajax({
       method: "POST",
       url: "/maps",
-      data: { map_req : this.id.split('-').slice(1).join('_') },
+      data: { map_req : map_req_type },
     }).then(function(res) {
       $( '#maps-viewer-wrapper' ).empty();
       Object.values(res.maps).forEach((map) => {
-        // if (map.owner_id === data.user_id) {
-          $( '#maps-viewer-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created));
-        // }
+        $( '#maps-viewer-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created));
       });
     });
   })
