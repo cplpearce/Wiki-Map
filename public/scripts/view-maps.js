@@ -34,7 +34,7 @@ $( document ).ready(function() {
   };
 
   // Get my maps on nav click
-  $( '#view-view-maps' ).click(function() {
+  $( '#view-my-maps' ).click(function() {
     $.ajax({
       method: "POST",
       url: "/maps",
