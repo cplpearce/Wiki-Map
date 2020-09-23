@@ -72,12 +72,34 @@ module.exports = (db) => {
       });
   });
 
-  router.get("/:id", (req, res) => {
+
+//// to populate a map
+  router.get("/:id/markers", (req, res) => {
     const map_id = req.params.id;
     db.query(
       `SELECT *
       FROM markers
       WHERE map_id = $1 AND markers.active = TRUE;`,
+      [map_id])
+      .then(data => {
+        const users = data.rows;
+        res.json(users);
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
+
+
+///// get map details
+  router.get("/:id/markers", (req, res) => {
+    const map_id = req.params.id;
+    db.query(
+      `SELECT *
+      FROM maps
+      WHERE id = $1 AND maps.active = TRUE;`,
       [map_id])
       .then(data => {
         const users = data.rows;
