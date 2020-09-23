@@ -17,31 +17,33 @@ module.exports = (db) => {
 
   router.get("/user", (req, res) => {
     const user_id = req.session.user_id;
-
+    if (!user_id) res.send("no login");
     const getUserInfo = db.query(
-      `SELECT *
+      `SELECT name, email, location
       FROM users
       WHERE id = ${user_id}
       `);
 
     const getUserCollab = db.query(`
-    SELECT map_id AS collab_map
+    SELECT maps.title AS collab_map, map_id
     FROM collaborations
+    JOIN maps ON maps.id = map_id
     WHERE user_id = ${user_id}
     `);
 
     const getUserFav = db.query(`
-    SELECT map_id AS fav_map
+    SELECT maps.title AS fav_map, map_id
     FROM favorite_maps
+    JOIN maps ON maps.id = map_id
     WHERE user_id = ${user_id}
     `);
     Promise.all([getUserInfo,getUserCollab, getUserFav])
       .then(data => {
-        const [info, collab, fav] = data;
+        const [info, collabs, favs] = data;
         const profile = {
           info : info.rows[0],
-          collab : collab.rows,
-          fav : fav.rows
+          collabs : collabs.rows,
+          favs : favs.rows
         };
         res.json(profile);
       })
