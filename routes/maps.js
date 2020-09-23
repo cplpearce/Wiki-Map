@@ -5,19 +5,19 @@ const addNewMarkers = (newMarkers, map_id, db) => {
   const insertedMarkers = [];
   for (const marker of newMarkers) {
     const user_id = 1;
-    const title = marker.name;
+    const title = marker.title;
     const desc = marker.description;
-    const markerPos = `(${marker.lat}, ${marker.long})`;
-    const thumbnailUrl = marker.thumbnailUrl;
-
+    const markerPos = `(${marker.lat}, ${marker.lon})`;
+    // const thumbnailUrl = marker.thumbnailUrl; NOT FUCNTIONNAL
     db.query(`
-    INSERT INTO markers (owner_id, map_id, title, description, location, thumbnail_url)
-    VALUES (${user_id}, ${map_id}, $1, $2, point${markerPos}, '${thumbnailUrl}')
+    INSERT INTO markers (owner_id, map_id, title, description, location)
+    VALUES (${user_id}, ${map_id}, $1, $2, point${markerPos})
     RETURNING *;`
     , [`${title}`, `${desc}`])
       .then((insertedMarker) => {
         insertedMarkers.push(insertedMarker);
-      });
+      })
+      .catch();
   }
   return insertedMarkers;
 };
@@ -70,22 +70,23 @@ module.exports = (db) => {
   ///Creat new map
 
   router.post("/", (req, res) => {
-    const mapTitle = "Ipsmap"; /// req.body
+    const mapTitle = req.body.map_name;
     const user_id = 1; //req.[some clue about the user]
-    const private = false; //req.body
+    const public = req.body.map_public;
     db.query(
-      `INSERT INTO maps (title, user_id, private)
-       VALUES ($1, ${user_id}, ${private})
-       RETURNING *;`,
+      `INSERT INTO maps (title, owner_id, private)
+      VALUES ($1, ${user_id}, ${public})
+      RETURNING *;`,
       [mapTitle])
       .then(data => {
-        addNewMarkers(req.body.map.markers);////// mettons
+        const map_id = data.rows[0].id;
+        addNewMarkers(req.body.points, map_id, db);
         return data;
-      }).then(data => {
-        const newMap = getMapById(data.rows[0].id);///// mettons
+      })
+      .then(data => getMapById(data.rows[0].id, db))
+      .then((newMap) => {
         res.json(newMap);
-      }
-      )
+      })
       .catch(err => {
         res
           .status(500)

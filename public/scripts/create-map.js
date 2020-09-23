@@ -123,19 +123,24 @@ $( document ).ready(function() {
   // POST map to server
   $( '#map-post-btn' ).click(function() {
     const postNewMapData = {};
+
     postNewMapData.points = markerGroup.getLayers().map((marker) => {
       return {
-        name: marker.options.name,
+        title: marker.options.title,
         description: marker.options.description,
         lat: marker._latlng.lat,
         lon: marker._latlng.lng,
-      }
+      };
     });
     postNewMapData.map_name = $( '#map-settings-name' ).val();
     postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
-    //$.post( "/maps", function(postNewMapData) {
-      // Clear map
-    //});
-  })
+    $.ajax({
+      method: "POST",
+      url: "/maps",
+      data: postNewMapData
+    }).then(newmap =>{
+      console.log(newmap); ///// NEW MAP
+    });
+  });
 });
 
