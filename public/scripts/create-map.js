@@ -148,7 +148,7 @@ $( document ).ready(function() {
     postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
     $.ajax({
       method: "POST",
-      url: "/maps",
+      url: "/maps/create",
       data: postNewMapData
     }).then(newmap =>{
       console.log(newmap); ///// NEW MAP

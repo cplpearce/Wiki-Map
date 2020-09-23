@@ -31,8 +31,25 @@ $( document ).ready(function() {
       </div>
     </div>
     `
-
   };
+
+  // Get my maps on nav click
+  $( '#view-view-maps' ).click(function() {
+    $.ajax({
+      method: "POST",
+      url: "/maps",
+      data: { map_req : 'my_maps' },
+    }).then(function(res) {
+      $( '#maps-viewer-wrapper' ).empty('')
+      Object.values(res.maps).forEach((map) => {
+        // if (map.owner_id === data.user_id) {
+          $( '#maps-viewer-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created));
+        // }
+      });
+    });
+  })
+
+  /*
   // Get my maps
   $.ajax({
     method: "GET",
@@ -45,11 +62,9 @@ $( document ).ready(function() {
       // }
     });
   });
-
+  */
 
   $(document).on("click", "[id|='map-card-edit']" , function() {
-
-
 
     const mapID = this.id.split('-').slice(-1)
 
@@ -99,7 +114,8 @@ $( document ).ready(function() {
           share_url: null
           thumbnail_url: "https://picsum.photos/200"
           title: "The Woofer - Animal Sanctuary"
-        */
+      */
+
       Object.values(markerData).forEach((marker) => {
         const latlng = [marker.location.x, marker.location.y];
         console.log(latlng);
