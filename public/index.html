@@ -71,7 +71,7 @@
         <!-- Profile contains user data and pynPoint settings button -->
         <button id="view-profile" class="btn btn-info" type="button">Profile</button>
         <!-- Logout button -->
-        <button class="btn btn-danger" type="button">Logout</button>
+        <button class="btn btn-danger" type="button" id="logout">Logout</button>
       </div>
     </nav>
 
@@ -223,7 +223,7 @@
         <!-- login modal -->
         <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog">
           <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
+            <form class="modal-content" id="login-form">
               <div class="modal-header text-center">
                 <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
                 <button type="button" class="close" data-dismiss="modal">
@@ -236,21 +236,21 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="basic-addon1">Username</span>
                     </div>
-                    <input type="text" class="form-control" placeholder="Username">
+                    <input type="text" class="form-control" placeholder="Username" id="login-username">
                   </div>
                 </div>
                 <div class="input-group mb-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">Password</span>
                   </div>
-                  <input type="password" class="form-control" placeholder="Password">
+                  <input type="password" class="form-control" placeholder="Password" id="login-password">
                 </div>
               </div>
               <div class="modal-footer d-flex justify-content-center">
                 <!-- change page to view My Maps -->
-                <button class="btn btn-success btn-hover-white" id="button-launch-modal">Submit</button>
+                <button type="submit" class="btn btn-success btn-hover-white" id="button-launch-modal">Submit</button>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>

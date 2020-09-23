@@ -1,12 +1,7 @@
 const express = require('express');
 const router  = express.Router();
 const app        = express();
-const cookieSession = require('cookie-session');
 
-app.use(cookieSession({
-  name: 'session',
-  keys: ["not comfortable with all whose secrets"]
-}));
 
 module.exports = (db) => {
   router.post("/", (req, res) => {
@@ -18,15 +13,14 @@ module.exports = (db) => {
     WHERE name = $1;`
     ,[username])
       .then(data => {
-        //////////TO TEST//////////
-        if (password === data.rows[0].password) {
-
-          req.session.user_id = data.rows[0].id;
-          res.session();
-        } else {
+        console.log(data.rows[0]);
+        if (!data.rows[0] || data.rows[0].password !== password) {
           res
             .status(401)
             .send('authentification failed');
+        } else {
+          req.session.user_id = data.rows[0].id;
+          res.send("Login Sucessful");
         }
       })
       .catch(err => {
