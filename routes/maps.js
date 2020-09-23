@@ -37,7 +37,6 @@ module.exports = (db) => {
   router.post("/", (req, res) => {
     const subGroup = req.body.map_req;
     let queryFilter = "";
-
     switch (subGroup) {
     case "public":
       queryFilter = `WHERE private = FALSE`;

@@ -34,8 +34,7 @@ $( document ).ready(function() {
 
   // Get my maps on nav click
   $( "[id|='viewer']" ).click(function() {
-    const map_req_type = this.id.split('-').slice(1).join('_');
-    console.log(map_req_type)
+    const map_req_type = this.id.split('-').slice(1).join('-');
     $.ajax({
       method: "POST",
       url: "/maps",
@@ -48,12 +47,41 @@ $( document ).ready(function() {
     });
   })
 
-  // When a user clicks on 'view', open the Map window to view
-  $(document).on("click", "[id|='map-card-edit']" , function() {
-    // Get the mapID by taking the button ID, splitting it, and taking the last value
-    const mapID = this.id.split('-').slice(-1);
-    console.log(mapID);
 
+    /*
+    $.get(`/maps/${mapID}`, function(markerData) {
+      const pointCount = 1;
+        Object.values(markerData).forEach((markerRead) => {
+        const latlng = [markerRead.location.x, markerRead.location.y];
+        console.log(markerRead);
+        marker = new L.marker(latlng, {pointNumber: pointCount, title: markerRead.title, description: markerRead.description, image: markerRead.thumbnail_url, draggable: true}).addTo(markerGroup);
+        // Set the popoup for these new markers
+        marker.bindPopup(`
+        <div id="marker-popup-div-${marker.options.pointNumber}" class="d-flex justify-content-center flex-column">
+          <strong>Name: ${marker.options.title}</strong>
+          <strong>Description: ${marker.options.description}</strong>
+          <strong>Latitude: ${marker._latlng.lat.toFixed(5)}</strong>
+          <strong>Longitude: ${marker._latlng.lng.toFixed(5)}</strong>
+          <img class="popup-image" src="${marker.options.image}" onerror="this.style.display='none'"/>
+        </div>
+
+        `, {maxWidth : 200});
+
+         // Set a popup on mouseover
+        marker.on('mouseover', function() {
+          marker.setPopupContent(`
+          <div id="marker-popup-div-${marker.options.pointNumber}" class="d-flex justify-content-center flex-column">
+            <strong>Name: ${marker.options.title}</strong>
+            <strong>Description: ${marker.options.description}</strong>
+            <strong>Latitude: ${marker._latlng.lat.toFixed(5)}</strong>
+            <strong>Longitude: ${marker._latlng.lng.toFixed(5)}</strong>
+            <img class="popup-image" src="${marker.options.image}" onerror="this.style.display='none'"/>
+          </div>
+          `);
+          this.openPopup();
+       });
+    });
+    });
   });
   /*
   // Listen to the document clicking the button, since Jquery can only grab DOM elements
@@ -165,5 +193,3 @@ $( document ).ready(function() {
   });
   */
 });
-
-

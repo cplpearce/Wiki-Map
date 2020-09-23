@@ -4,7 +4,22 @@
 $( document ).ready(function() {
 
   // Hide unused toolbar items
-  $( '[id|="map-new"]' ).hide();
+  $( '[id|="map-edit"]' ).hide();
+
+  // Set the popup internals
+  function renderPopup(marker) {
+    // In case there wasn't an image set, set it to '' so there's no img url error
+    marker.options.image = marker.options.image || '';
+    return `
+    <div id="marker-popup-div-${marker.options.id}" class="d-flex justify-content-center flex-column">
+      <strong>Name: ${marker.options.title}</strong>
+      <strong>Description: ${marker.options.description}</strong>
+      <strong>Latitude: ${marker._latlng.lat.toFixed(5)}</strong>
+      <strong>Longitude: ${marker._latlng.lng.toFixed(5)}</strong>
+      <img class="point-image" src="${marker.options.image}" onerror="this.style.display='none'"/>
+    </div>
+    `;
+  }
 
   // Ensure all divs in the map don't propagate
   const toolbar = L.DomUtil.get('map-toolbar');
@@ -42,14 +57,65 @@ $( document ).ready(function() {
     map.invalidateSize();
   });
 
-  // CREATING A NEW MAP
+  // To begin upon creating a new map
   // When the create-new button is pressed
-  $( '#map-create-new' ).click(function() {
+  function editorEnable(mapID) {
+
+    // If any layers exist remove them
+    map.eachLayer(function (layer) {
+      console.log(layer)
+      layer._url || map.removeLayer(layer);
+    });
+
+    // Create a feature group to hold any created points
+    // For reference, a Feature Group is an advanced Layer Group
+    // with more features and methods.
+    const markerGroup = new L.FeatureGroup();
+    // And add it to the map
+    map.addLayer(markerGroup);
+
+    // Set a point counter
+    let pointCount = 1;
+    // If editorEnable is passed with a map ID
+    if (mapID) {
+      // GET MAP NAME, ETC HERE
+      $.get(`/maps/${mapID}`, function(mapData) {
+        // get Map name $( '#map-settings-name' ).val();
+        // get map privacy $( '#map-settings-public' ).val(mapData[0].active)
+        const pointCount = 1;
+        Object.values(mapData).forEach((markerRead) => {
+          const latlng = [markerRead.location.x, markerRead.location.y];
+          marker = new L.marker(latlng, {
+            pointNumber: pointCount,
+            title: markerRead.title,
+            description: markerRead.description,
+            image: markerRead.thumbnail_url,
+            id: markerRead.id,
+            draggable: true}
+            ).addTo(markerGroup);
+          // Set the popoup for these new markers
+          marker.bindPopup(renderPopup(marker), {maxWidth : 200});
+
+            // Set a popup on mouseover
+          marker.on('mouseover', function() {
+            marker.setPopupContent(renderPopup(marker), {maxWidth : 200});
+            this.openPopup();
+          });
+          marker.bindTooltip(marker.options.title,
+            {
+              permanent: true,
+              direction: 'right',
+            });
+        });
+        const bounds = markerGroup.getBounds();
+        map.fitBounds(bounds);
+      });
+    }
 
     // Hide itself
     $( '#map-create-new' ).hide();
     // And show all the map editor buttons
-    $( '[id|="map-new"]' ).show();
+    $( '[id|="map-edit"]' ).show();
     // Add the req modals to the map-modals div
     $( '#map-modals' ).html(`
       <!-- Modal for map points -->
@@ -130,48 +196,22 @@ $( document ).ready(function() {
     L.DomEvent.on(newMapSettings, 'mousewheel', L.DomEvent.stopPropagation);
     L.DomEvent.on(newMapSettings, 'dblclick', L.DomEvent.stopPropagation);
 
-    // Set a point counter
-    let pointCount = 1;
-
-    // Create a feature group to hold any created points
-    // For reference, a Feature Group is an advanced Layer Group
-    // with more features and methods.
-    const markerGroup = new L.FeatureGroup();
-    // And add it to the map
-    map.addLayer(markerGroup);
-
     // Create a point when dblclicking basemap
     map.on('dblclick', (event) => {
       const marker = new L.marker(event.latlng, {pointNumber: pointCount, title: `Point ${pointCount}`, description: '', image: '', draggable: true}).addTo(markerGroup);
-      marker.bindPopup(`
-        <div id="marker-popup-div-${marker.options.pointNumber}" class="d-flex justify-content-center flex-column">
-          <strong>Name: ${marker.options.title}</strong>
-          <strong>Description: ${marker.options.description}</strong>
-          <strong>Latitude: ${marker._latlng.lat.toFixed(5)}</strong>
-          <strong>Longitude: ${marker._latlng.lng.toFixed(5)}</strong>
-          <img src="${marker.options.image}"/>
-        </div>
-      `);
-      // set it's Tooltip to it's name
+      marker.bindPopup(renderPopup(marker), {maxWidth : 200});
+      // set it's Tooltip to its name
       marker.bindTooltip(marker.options.title,
       {
-          permanent: true,
-          direction: 'right',
+        permanent: true,
+        direction: 'right',
       });
 
       // Set a popup on mouseover
       marker.on('mouseover', function() {
         // Every time we mouse over, update the popup with the LatLon and any changed vars
-        marker.setPopupContent(`
-        <div id="marker-popup-div-${marker.options.pointNumber}" class="d-flex justify-content-center flex-column">
-          <strong>Name: ${marker.options.title}</strong>
-          <strong>Description: ${marker.options.description}</strong>
-          <strong>Latitude: ${marker._latlng.lat.toFixed(5)}</strong>
-          <strong>Longitude: ${marker._latlng.lng.toFixed(5)}</strong>
-          <img class="point-image" src="${marker.options.image}" onerror="this.style.display='none'"/>
-        </div>
-        `);
-        this.openPopup();
+        marker.setPopupContent(renderPopup(marker), { maxWidth : 200 });
+          this.openPopup();
       });
 
       // Close the popup on mouse out
@@ -189,7 +229,7 @@ $( document ).ready(function() {
     });
 
     // View and edit placed points
-    $( '#map-new-points-btn' ).click(function() {
+    $( '#map-edit-points-btn' ).click(function() {
       $( '#map-points-table-body' ).empty();
       markerGroup.eachLayer(function(marker) {
         $( '#map-points-table-body' ).append(`
@@ -221,44 +261,91 @@ $( document ).ready(function() {
       });
     });
 
-    // Clear all points off map button
-    $( '#map-new-clear-points-btn' ).click(() => {
+    // Clear the map of all points and reset counter to 1
+    function clearMap() {
       pointCount = 1;
       markerGroup.clearLayers();
+    }
+
+    // clearMap when the Clear map button is pressed
+    $( '#map-edit-clear-points-btn' ).click(() => {
+      clearMap();
     });
 
-    // POST map to server
-    $( '#map-new-post-btn' ).click(function() {
-      const postNewMapData = {};
+    // POST or Update map to server
+    $( '#map-edit-post-btn' ).click(function() {
+      if (mapID) {
+        // POST new map
+        const postNewMapData = {};
 
-      postNewMapData.points = markerGroup.getLayers().map((marker) => {
-        return {
-          title: marker.options.title,
-          description: marker.options.description,
-          url: marker.options.image,
-          lat: marker._latlng.lat,
-          lon: marker._latlng.lng,
-        };
-      });
-      postNewMapData.map_name = $( '#map-settings-name' ).val();
-      postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
-      $.ajax({
-        method: "POST",
-        url: "/maps/create",
-        data: postNewMapData
-      }).then(newmap =>{
-        console.log(newmap); ///// NEW MAP
-      });
+        postNewMapData.points = markerGroup.getLayers().map((marker) => {
+          return {
+            title: marker.options.title,
+            description: marker.options.description,
+            url: marker.options.image,
+            lat: marker._latlng.lat,
+            lon: marker._latlng.lng,
+            id: marker.options.id,
+          };
+        });
+        postNewMapData.map_name = $( '#map-settings-name' ).val();
+        postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
+        console.log(postNewMapData);
+        $.ajax({
+          method: "PUT",
+          url: "/maps/create",
+          data: postNewMapData
+        })
+      } else {
+        // POST new map
+        const postNewMapData = {};
+
+        postNewMapData.points = markerGroup.getLayers().map((marker) => {
+          return {
+            title: marker.options.title,
+            description: marker.options.description,
+            url: marker.options.image,
+            lat: marker._latlng.lat,
+            lon: marker._latlng.lng,
+          };
+        });
+        postNewMapData.map_name = $( '#map-settings-name' ).val();
+        postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
+        $.ajax({
+          method: "POST",
+          url: "/maps/create",
+          data: postNewMapData
+        })
+      };
     });
 
-    $( '#map-new-cancel-btn' ).click(() => {
-
+    // Hide the toolbar buttons and remove any elements
+    function exitMapEdit() {
       // Show the create map button
       $( '#map-create-new' ).show();
       // And hide all the map editor buttons
-      $( '[id|="map-new"]' ).hide();
+      $( '[id|="map-edit"]' ).hide();
+      // Remove the markerGroup
       map.removeLayer(markerGroup);
+    }
+
+    // Call exitMapEdit
+    $( '#map-edit-cancel-btn' ).click(() => {
+      exitMapEdit();
     });
+  };
+
+  // Enable a new editor without importing any points
+  $( '#map-create-new' ).on('click', () => {
+    editorEnable()
+  });
+
+  // When a user clicks on 'view', open the Map window to view
+  // then on a map card, load the editor
+  $(document).on("click", "[id|='map-card-edit']" , function() {
+    // Get the mapID by taking the button ID, splitting it, and taking the last value
+    const mapID = this.id.split('-').slice(-1);
+    $( '#view-map' ).trigger('click');
+    editorEnable(mapID);
   });
 });
-
