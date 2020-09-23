@@ -34,17 +34,11 @@ $( document ).ready(function() {
   };
   // Get my maps
 
-  $.ajax({
-    method: "GET",
-    url: "/maps",
-  }).then(function(data) {
-    Object.values(data.maps).forEach((map) => {
-      $( '#maps-viewer-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created));
-      // add if map.user_id === my id
-    });
-  });
+
+
 
   $(document).on("click", "[id|='map-card-edit']" , function() {
+
 
     const mapID = this.id.split('-').slice(-1)
 

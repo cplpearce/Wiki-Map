@@ -37,8 +37,9 @@ module.exports = (db) => {
   router.get("/", (req, res) => {
     db.query(`SELECT * FROM maps;`)
       .then(data => {
+        const user_id  = req.session.user_id;
         const maps = data.rows;
-        res.json({ maps });
+        res.json({ maps, user_id });
       })
       .catch(err => {
         res
