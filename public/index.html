@@ -45,7 +45,7 @@
     <!-- Nav bar, indludes branding and all links to other page functions -->
     <nav id="main-nav" class="navbar navbar-light bg-dark">
       <!-- Logo -->
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand">
         <img src="img/pynPoint_.png" width="120" height="40" alt="" loading="lazy">
       </a>
       <div id="nav-buttons" class="btn-group" role="group">
@@ -53,19 +53,20 @@
         <button id="view-create-map" class="btn btn-primary" type="button">Create A Map!</button>
         <!-- View maps button group -->
         <div class="btn-group" role="group">
-          <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+          <button id="view-view-maps" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
             View Maps
           </button>
           <div class="dropdown-menu">
             <!-- Maps the user has created -->
-            <a id="view-my-maps" class="dropdown-item" href="#">My Maps</a>
+            <a id="viewer-my-maps" class="dropdown-item">My Maps</a>
             <!-- Maps that the user's team has worked on -->
-            <a id="view-team-maps" class="dropdown-item" href="#">Team Maps</a>
+            <a id="viewer-team-maps" class="dropdown-item">Team Maps</a>
             <!-- Maps that the user has favorited -->
-            <a id="view-favorite-maps" class="dropdown-item" href="#">Public Maps</a>
+            <a id="viewer-favorite-maps" class="dropdown-item">My Favorite Maps</a>
+            <!-- Divider -->
             <div class="dropdown-divider"></div>
             <!-- Maps that are publically visible -->
-            <a id="view-public-maps" id="view-popular-map" class="dropdown-item" href="#">Popular Maps</a>
+            <a id="viewer-public-maps" id="view-popular-map" class="dropdown-item">Public Maps</a>
           </div>
         </div>
         <!-- Profile contains user data and pynPoint settings button -->
@@ -218,7 +219,7 @@
         <h1>Welcome to pynPoint!<h1>
         <h4>Please login to start creating maps!</h4>
         <div class="text-center">
-          <button href="" type="button" class="btn bg-success btn-lg btn-hover-white" data-toggle="modal" data-target="#modalLoginForm">Login</button>
+          <button type="button" class="btn bg-success btn-lg btn-hover-white" data-toggle="modal" data-target="#modalLoginForm">Login</button>
         </div>
         <!-- login modal -->
         <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog">

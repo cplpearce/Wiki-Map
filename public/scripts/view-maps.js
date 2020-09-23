@@ -34,13 +34,13 @@ $( document ).ready(function() {
   };
 
   // Get my maps on nav click
-  $( '#view-my-maps' ).click(function() {
+  $( "[id|='viewer']" ).click(function() {
     $.ajax({
       method: "POST",
       url: "/maps",
-      data: { map_req : 'my_maps' },
+      data: { map_req : this.id.split('-').slice(1).join('_') },
     }).then(function(res) {
-      $( '#maps-viewer-wrapper' ).empty('')
+      $( '#maps-viewer-wrapper' ).empty();
       Object.values(res.maps).forEach((map) => {
         // if (map.owner_id === data.user_id) {
           $( '#maps-viewer-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created));
