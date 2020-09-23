@@ -31,13 +31,16 @@ $( document ).ready(function() {
       </div>
     </div>
     `
+
   };
   // Get my maps
 
 
 
 
+
   $(document).on("click", "[id|='map-card-edit']" , function() {
+
 
 
     const mapID = this.id.split('-').slice(-1)

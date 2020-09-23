@@ -1,4 +1,4 @@
-/////POST TO /login
+
 $( document ).ready(function() {
   $('#login-form').submit((event) => {
     const credentials = {
@@ -10,7 +10,10 @@ $( document ).ready(function() {
       method: "POST",
       url: "/login",
       data: credentials
-    }).then(data => console.log(data));
+    }).then(data => {
+      getMyMaps();
+      console.log(data);
+    });
   });
 
   $('#logout').click(() => {
