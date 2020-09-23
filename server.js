@@ -57,9 +57,9 @@ app.use("/login", loginRoutes(db));
 // Home page
 app.get("/", (req, res) => {
   if (!req.session.user_id) {
-    res.render("index").send({logged : false});
+    res.render("index", { session : false });
   } else {
-    res.render("index").send({logged : true });
+    res.render("index", { session : true });
   }
 });
 

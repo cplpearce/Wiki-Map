@@ -11,11 +11,12 @@ $( document ).ready(function() {
       url: "/login",
       data: credentials
     }).then(data => {
-      console.log(data);
+      window.location.reload(true);
     });
   });
 
   $('#logout').click(() => {
     $.post("/login/logout");
+    window.location.reload(true);
   });
 });

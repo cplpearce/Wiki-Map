@@ -57,7 +57,7 @@ module.exports = (db) => {
       //// based on most favorited
       break;
     }
-
+    if (!queryFilter) return new Error("Query did not work");
     db.query(`SELECT * FROM maps
               ${queryFilter};`)
       .then(data => {
