@@ -1,6 +1,5 @@
 const express = require('express');
 const router  = express.Router();
-const { getUsersByEmail } = require('../db/database');
 
 module.exports = (db) => {
   router.get("/", (req, res) => {
@@ -16,19 +15,35 @@ module.exports = (db) => {
       });
   });
 
-  router.get("/:id", (req, res) => {
-    const user_id = req.params.id;
-    db.query(
-      `SELECT name, email, maps.title AS owned_maps, favorite_maps.map_id AS favorites, collaborations.map_id AS collaborations
+  router.get("/user", (req, res) => {
+    const user_id = req.session.user_id;
+
+    const getUserInfo = db.query(
+      `SELECT *
       FROM users
-      LEFT JOIN maps ON owner_id = users.id
-      LEFT JOIN favorite_maps ON favorite_maps.user_id = users.id
-      LEFT JOIN collaborations ON collaborations.user_id = users.id
-      WHERE users.id = $1;`,
-      [user_id])
+      WHERE id = ${user_id}
+      `);
+
+    const getUserCollab = db.query(`
+    SELECT map_id AS collab_map
+    FROM collaborations
+    WHERE user_id = ${user_id}
+    `);
+
+    const getUserFav = db.query(`
+    SELECT map_id AS fav_map
+    FROM favorite_maps
+    WHERE user_id = ${user_id}
+    `);
+    Promise.all([getUserInfo,getUserCollab, getUserFav])
       .then(data => {
-        const users = data.rows[0];
-        res.json(users);
+        const [info, collab, fav] = data;
+        const profile = {
+          info : info.rows[0],
+          collab : collab.rows,
+          fav : fav.rows
+        };
+        res.json(profile);
       })
       .catch(err => {
         res

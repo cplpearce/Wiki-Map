@@ -42,19 +42,19 @@ module.exports = (db) => {
     case "public":
       queryFilter = `WHERE private = FALSE`;
       break;
-    case "my_maps":
+    case "my-maps":
       queryFilter = `WHERE owner_id = ${req.session.user_id}`;
       break;
-    case "team_maps":
+    case "team-maps":
       queryFilter = `LEFT JOIN collaborations ON maps.id = map_id
                      WHERE collaborations.user_id = ${req.session.user_id}`;
       break;
-    case "favorite_maps":
+    case "favorite-maps":
       queryFilter = `LEFT JOIN favorite_maps ON map_id = maps.id
                      WHERE favorite_maps.user_id = ${req.session.user_id}`;
       break;
     case "popular":
-      //// based on recent favorites
+      //// based on most favorited
       break;
     }
 
@@ -75,9 +75,8 @@ module.exports = (db) => {
   router.get("/:id", (req, res) => {
     const map_id = req.params.id;
     db.query(
-      `SELECT maps.title AS map_title, maps.id AS map_id, markers.*
+      `SELECT *
       FROM markers
-      JOIN maps ON map_id = maps.id
       WHERE map_id = $1 AND markers.active = TRUE;`,
       [map_id])
       .then(data => {
@@ -96,27 +95,31 @@ module.exports = (db) => {
 
   router.post("/create", (req, res) => {
     const mapTitle = req.body.map_name;
-    const user_id = 1; //req.[some clue about the user]
+    const user_id = req.session.user_id;
     const public = req.body.map_public;
-    db.query(
-      `INSERT INTO maps (title, owner_id, private)
-      VALUES ($1, ${user_id}, ${public})
-      RETURNING *;`,
-      [mapTitle])
-      .then(data => {
-        const map_id = data.rows[0].id;
-        addNewMarkers(req.body.points, map_id, db);
-        return data;
-      })
-      .then(data => getMapById(data.rows[0].id, db))
-      .then((newMap) => {
-        res.json(newMap);
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
-      });
+    if (user_id) {
+      db.query(
+        `INSERT INTO maps (title, owner_id, private)
+        VALUES ($1, ${user_id}, ${public})
+        RETURNING *;`,
+        [mapTitle])
+        .then(data => {
+          const map_id = data.rows[0].id;
+          addNewMarkers(req.body.points, map_id, db);
+          return data;
+        })
+        .then(data => getMapById(data.rows[0].id, db))
+        .then((newMap) => {
+          res.json(newMap);
+        })
+        .catch(err => {
+          res
+            .status(500)
+            .json({ error: err.message });
+        });
+    } else {
+      res.send('please log in to create maps');
+    }
   });
 
 
@@ -124,7 +127,7 @@ module.exports = (db) => {
 
   router.post("/:id/favorite", (req, res) => {
     const map_id = req.params.id;
-    const user_id = 1; //req.[some clue about the user]
+    const user_id = req.session.user_id;
 
     db.query(`
     INSERT INTO favorite_maps (user_id, map_id)
