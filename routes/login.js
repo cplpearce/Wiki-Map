@@ -13,14 +13,13 @@ module.exports = (db) => {
     WHERE name = $1;`
     ,[username])
       .then(data => {
-        console.log(data.rows[0]);
         if (!data.rows[0] || data.rows[0].password !== password) {
           res
             .status(401)
             .send('authentification failed');
         } else {
           req.session.user_id = data.rows[0].id;
-          res.send("Login Sucessful");
+          res.send(`${data.rows[0].id}`);
         }
       })
       .catch(err => {

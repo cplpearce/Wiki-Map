@@ -10,7 +10,7 @@ $( document ).ready(function() {
       method: "POST",
       url: "/login",
       data: credentials
-    });
+    }).then(data => console.log(data));
   });
 
   $('#logout').click(() => {
