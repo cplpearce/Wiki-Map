@@ -37,7 +37,7 @@ $( document ).ready(function() {
 
   // Create a point when dblclicking basemap
   map.on('dblclick', (event) => {
-    const marker = new L.marker(event.latlng, {pointNumber: pointCount, title: '', description: '', image: 'https://oie.msu.edu/_assets/images/placeholder/placeholder-200x200.jpg', draggable: true}).addTo(markerGroup);
+    const marker = new L.marker(event.latlng, {pointNumber: pointCount, title: `Point ${pointCount}`, description: '', image: '', draggable: true}).addTo(markerGroup);
     marker.bindPopup(`
     <div id="marker-popup-div-${marker.options.pointNumber}" class="d-flex justify-content-center flex-column">
       <strong>Name: ${marker.options.title}</strong>
@@ -47,6 +47,7 @@ $( document ).ready(function() {
       <img src="${marker.options.image}"/>
     </div>
     `);
+
     marker.bindTooltip(`Point: ${marker.options.pointNumber}`,
     {
         permanent: true,
@@ -55,13 +56,14 @@ $( document ).ready(function() {
 
     // Set a popup on mouseover
     marker.on('mouseover', function() {
+      // Every time we mouse over, update the popup with the LatLon and any changed vars
       marker.setPopupContent(`
       <div id="marker-popup-div-${marker.options.pointNumber}" class="d-flex justify-content-center flex-column">
         <strong>Name: ${marker.options.title}</strong>
         <strong>Description: ${marker.options.description}</strong>
         <strong>Latitude: ${marker._latlng.lat.toFixed(5)}</strong>
         <strong>Longitude: ${marker._latlng.lng.toFixed(5)}</strong>
-        <img class="point-image" src="${marker.options.image}"/>
+        <img class="point-image" src="${marker.options.image}" onerror="this.style.display='none'"/>
       </div>
       `);
       this.openPopup();
@@ -97,8 +99,8 @@ $( document ).ready(function() {
           <td scope="row">${marker.options.pointNumber}</th>
           <td>${marker._latlng.lat.toFixed(5)}</td>
           <td>${marker._latlng.lng.toFixed(5)}</td>
-          <td><input value="${marker.options.title}" placeholder="A name for your pyn" class="form-control" id="point-${marker.options.pointNumber}-title"></input></td>
-          <td><input value="${marker.options.description}" class="form-control" placeholder="A brief pyn description"  id="point-${marker.options.pointNumber}-description"></input></td>
+          <td><input onClick="this.select();" value="${marker.options.title}" placeholder="A name for your pyn" class="form-control" id="point-${marker.options.pointNumber}-title"></input></td>
+          <td><input onClick="this.select();" value="${marker.options.description}" class="form-control" placeholder="A brief pyn description"  id="point-${marker.options.pointNumber}-description"></input></td>
           <td><input onClick="this.select();" value="${marker.options.image}" class="form-control" placeholder="Max 200px*200px" id="point-${marker.options.pointNumber}-image"></input></td>
         </tr>
       `);
