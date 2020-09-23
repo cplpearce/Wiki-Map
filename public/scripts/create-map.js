@@ -109,9 +109,18 @@ $( document ).ready(function() {
   $( '#modal-view-points-save' ).click(() => {
     markerGroup.eachLayer(function(marker) {
       marker.options.title = $( `#point-${marker.options.pointNumber}-title` ).val();
-      marker.options.description = $( `#point-${marker.options.pointNumber}-description` ).val()
-      marker.options.image = $( `#point-${marker.options.pointNumber}-image` ).val()
+      marker.options.description = $( `#point-${marker.options.pointNumber}-description` ).val();
+      marker.options.image = $( `#point-${marker.options.pointNumber}-image` ).val();
+      if (marker.options.title) {
+        marker.closeTooltip();
+        marker.bindTooltip(`Point: ${marker.options.title}`,
+        {
+            permanent: true,
+            direction: 'right',
+        });
+      }
     });
+
   });
 
   // Clear all points off map button
@@ -128,6 +137,7 @@ $( document ).ready(function() {
       return {
         title: marker.options.title,
         description: marker.options.description,
+        url: marker.options.image,
         lat: marker._latlng.lat,
         lon: marker._latlng.lng,
       };

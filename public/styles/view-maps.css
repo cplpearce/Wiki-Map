@@ -1,7 +1,6 @@
 /* View maps container */
 #container-view-maps {
   display: none;
-
 }
 #maps-viewer-wrapper {
   display: flex;
@@ -26,4 +25,13 @@
   height: auto;
   min-height: 100%;
   border-radius: 0;
+}
+.popup-image {
+  width: 200px;
+  height: 200px;
+}
+#map-edit-frame{
+  width: 100px;
+  height: 100%;
+  width: 100%;
 }
