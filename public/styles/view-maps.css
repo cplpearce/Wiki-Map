@@ -3,6 +3,7 @@
   display: none;
 }
 #maps-viewer-wrapper {
+  padding-left: 5%;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
