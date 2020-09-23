@@ -56,7 +56,11 @@ app.use("/login", loginRoutes(db));
 
 // Home page
 app.get("/", (req, res) => {
-  res.render("index");
+  if (!req.session.user_id) {
+    res.render("index").send({logged : false});
+  } else {
+    res.render("index").send({logged : true });
+  }
 });
 
 app.listen(PORT, () => {
