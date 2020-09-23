@@ -38,11 +38,9 @@ $( document ).ready(function() {
     method: "GET",
     url: "/maps",
   }).then(function(data) {
-    console.log(data)
+    console.log(data);
     Object.values(data.maps).forEach((map) => {
-      // if (map.owner_id === data.user_id) {
         $( '#maps-viewer-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created));
-      // }
     });
   });
 

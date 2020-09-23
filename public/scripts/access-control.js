@@ -11,7 +11,6 @@ $( document ).ready(function() {
       url: "/login",
       data: credentials
     }).then(data => {
-      getMyMaps();
       console.log(data);
     });
   });
