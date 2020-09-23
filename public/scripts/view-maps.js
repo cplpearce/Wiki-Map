@@ -38,7 +38,7 @@ $( document ).ready(function() {
     $.ajax({
       method: "POST",
       url: "/maps",
-      data: { map_req : 'my_maps' },
+      data: { map_req : 'public' },
     }).then(function(res) {
       $( '#maps-viewer-wrapper' ).empty('')
       Object.values(res.maps).forEach((map) => {

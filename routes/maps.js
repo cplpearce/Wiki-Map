@@ -35,7 +35,7 @@ module.exports = (db) => {
   ////////////////////
 
   router.post("/", (req, res) => {
-    const subGroup = "favorite_maps"; //req.body.map_req;
+    const subGroup = req.body.map_req;
     let queryFilter = "";
 
     switch (subGroup) {
