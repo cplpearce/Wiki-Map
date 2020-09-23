@@ -11,7 +11,6 @@ $( document ).ready(function() {
         <h5 class="card-title">Title: ${title}</h5>
         <p class="text-muted">Date: ${date.toDateString()}</span>
         <br>
-        <br>
         <button id="map-card-edit-${id}" type="button" class="btn btn-primary">Edit</button>
         <button id="map-card-view-${id}" type="button" class="btn btn-primary">View</button>
       </div>
@@ -49,28 +48,27 @@ $( document ).ready(function() {
     });
   })
 
-  /*
-  // Get my maps
-  $.ajax({
-    method: "GET",
-    url: "/maps",
-  }).then(function(data) {
-    console.log(data);
-    Object.values(data.maps).forEach((map) => {
-        $( '#maps-viewer-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created));
-    });
-  });
-  */
-
-
+  // When a user clicks on 'view', open the Map window to view
   $(document).on("click", "[id|='map-card-edit']" , function() {
+    // Get the mapID by taking the button ID, splitting it, and taking the last value
+    const mapID = this.id.split('-').slice(-1);
+    console.log(mapID);
 
+  });
+  /*
+  // Listen to the document clicking the button, since Jquery can only grab DOM elements
+  // that were created at the start
+  $(document).on("click", "[id|='map-card-edit']" , function() {
+    // Get the mapID by taking the button ID, splitting it, and taking the last value
     const mapID = this.id.split('-').slice(-1)
 
+    // Start with the map invisible as it loads
+    $( '#map-edit-frame' ).fadeTo(0, 0);
+    // Basemap as stamen
     const basemapLayer = new L.StamenTileLayer("toner");
     const mapEdit = new L.Map('map-edit-frame', {
-        center: new L.LatLng(43.6532, -79.3832),
-        zoom: 12,
+        center: new L.LatLng(0, 0),
+        zoom: 10,
         name: 'My new Map',
     });
 
@@ -99,26 +97,10 @@ $( document ).ready(function() {
     const loadedMarkers = $.get(`/maps/${mapID}`, function(markerData) {
       const pointCount = 1;
 
-      /* Points object example
-        1:
-          active: true
-          date_created: "2020-09-22T15:27:56.784Z"
-          description: "The countrys landscape is colorful; steep, magnificent mountains, gorgeous flower fields and misty mountains are just a sliver of the wealth of beauty Athea has to offer, which is why the country is admired among foreigners."
-          id: 32
-          last_updated: "2020-09-22T15:27:56.784Z"
-          location: {x: 23, y: 116}
-          map_id: 4
-          map_title: "Director of Peace"
-          owner_id: 2
-          share_url: null
-          thumbnail_url: "https://picsum.photos/200"
-          title: "The Woofer - Animal Sanctuary"
-      */
-
-      Object.values(markerData).forEach((marker) => {
-        const latlng = [marker.location.x, marker.location.y];
-        console.log(latlng);
-        marker = new L.marker(latlng, {pointNumber: pointCount, title: marker.title, description: marker.description, image: 'https://oie.msu.edu/_assets/images/placeholder/placeholder-200x200.jpg', draggable: true}).addTo(markerGroup);
+        Object.values(markerData).forEach((markerRead) => {
+        const latlng = [markerRead.location.x, markerRead.location.y];
+        console.log(markerRead);
+        marker = new L.marker(latlng, {pointNumber: pointCount, title: markerRead.title, description: markerRead.description, image: markerRead.thumbnail_url, draggable: true}).addTo(markerGroup);
         // Set the popoup for these new markers
         marker.bindPopup(`
         <div id="marker-popup-div-${marker.options.pointNumber}" class="d-flex justify-content-center flex-column">
@@ -126,10 +108,10 @@ $( document ).ready(function() {
           <strong>Description: ${marker.options.description}</strong>
           <strong>Latitude: ${marker._latlng.lat.toFixed(5)}</strong>
           <strong>Longitude: ${marker._latlng.lng.toFixed(5)}</strong>
-          <img class="popup-image" src="${marker.options.image}"/>
+          <img class="popup-image" src="${marker.options.image}" onerror="this.style.display='none'"/>
         </div>
 
-        `);
+        `, {maxWidth : 200});
 
          // Set a popup on mouseover
         marker.on('mouseover', function() {
@@ -139,7 +121,7 @@ $( document ).ready(function() {
             <strong>Description: ${marker.options.description}</strong>
             <strong>Latitude: ${marker._latlng.lat.toFixed(5)}</strong>
             <strong>Longitude: ${marker._latlng.lng.toFixed(5)}</strong>
-            <img class="point-image" src="${marker.options.image}"/>
+            <img class="popup-image" src="${marker.options.image}" onerror="this.style.display='none'"/>
           </div>
           `);
           this.openPopup();
@@ -168,15 +150,20 @@ $( document ).ready(function() {
       // Toggle the editor modal...
       $( '#map-editor-modal' ).modal('toggle')
       // And listen for it to appear fully
-      $( '#map-editor-modal' ).on('shown.bs.modal', function() {
+      $( '#map-editor-modal' ).on('shown.bs.modal', () => {
         // Wait until the modal appears to reset the map window
         mapEdit.invalidateSize();
         // Declare, set, and zoom our map the extent of markerGroup!
         const bounds = markerGroup.getBounds();
+        $( '#map-edit-frame' ).fadeTo(500, 1);
         mapEdit.fitBounds(bounds);
+      }).on('hidden.bs.modal', () => {
+        $( '#map-edit-frame' ).empty().removeClass();
+        mapEdit.remove();
       });
     });
   });
+  */
 });
 
 

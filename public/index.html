@@ -26,13 +26,13 @@
     <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles/custom.css">
-    <link rel="stylesheet" href="styles/create-map.css">
+    <link rel="stylesheet" href="styles/map.css">
     <link rel="stylesheet" href="styles/view-maps.css">
     <!-- Custom general js -->
     <script src="scripts/client.js"></script>
     <!-- These js files control each page of the SPA -->
     <!-- Create a map js -->
-    <script src="scripts/create-map.js"></script>
+    <script src="scripts/map.js"></script>
     <!-- View maps js -->
     <script src="scripts/view-maps.js"></script>
     <!-- Profile js -->
@@ -50,7 +50,7 @@
       </a>
       <div id="nav-buttons" class="btn-group" role="group">
         <!-- Create map button -->
-        <button id="view-create-map" class="btn btn-primary" type="button">Create A Map!</button>
+        <button id="view-map" class="btn btn-primary" type="button">Map</button>
         <!-- View maps button group -->
         <div class="btn-group" role="group">
           <button id="view-view-maps" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
@@ -80,84 +80,19 @@
     <div id="pynPoint-container">
 
       <!-- Contains the map frame to create a new map -->
-      <div id="container-create-map">
+      <div id="container-map">
         <div id="map-frame">
-          <div id="create-map-toolbar">
-            <div class="btn-group" role="toolbar">
-              <button id="map-post-btn" type="button" class="btn btn-primary"><strong>Done!</strong></button>
-              <button id="map-points-btn" type="button" data-toggle="modal" data-target="#map-points-modal" class="btn btn-warning">Edit Points</button>
-              <button id="map-settings-btn" type="button" data-toggle="modal" data-target="#map-settings-modal" class="btn btn-info">Map Settings</button>
-              <button id="map-clear-points-btn" type="button" class="btn btn-danger">Clear Markers</button>
-            </div>
+          <div id="map-toolbar">
+            <!-- Button for creating a new map -->
+            <button id="map-create-new" type="button" class="btn btn-primary"><strong>Create New Map!</strong></button>
+            <!-- Buttons for editing a map : hidden by default -->
+            <button id="map-new-post-btn" type="button" class="btn btn-primary"><strong>Done!</strong></button>
+            <button id="map-new-cancel-btn" type="button" class="btn btn-danger"><strong>Cancel</strong></button>
+            <button id="map-new-points-btn" type="button" data-toggle="modal" data-target="#map-points-modal" class="btn btn-warning">Edit Points</button>
+            <button id="map-new-settings-btn" type="button" data-toggle="modal" data-target="#map-settings-modal" class="btn btn-info">Map Settings</button>
+            <button id="map-new-clear-points-btn" type="button" class="btn btn-danger">Clear Markers</button>
           </div>
-        </div>
-
-        <!-- Modal for map points -->
-        <div class="modal fade" id="map-points-modal" tabindex="-1" role="dialog">
-          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Edit Points</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                  <span>&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <table id="map-points-table" class="table table-striped table-hover">
-                  <thead class="thead-dark">
-                    <tr>
-                      <th class="text-center" scope="col">Point Number</th>
-                      <th class="text-center" scope="col">Latitude</th>
-                      <th class="text-center" scope="col">Longitude</th>
-                      <th class="text-center" scope="col">Title</th>
-                      <th class="text-center" scope="col">Description</th>
-                      <th class="text-center" scope="col">Image (URL)</th>
-                    </tr>
-                  </thead>
-                  <tbody id="map-points-table-body">
-                  </tbody>
-                </table>
-              </div>
-              <div class="modal-footer">
-                <button id="modal-view-points-save" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Modal for map settings -->
-        <div class="modal fade" id="map-settings-modal" tabindex="-1" role="dialog">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Map Settings</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                  <span>&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="map-settings-add-team-members">Map Name</span>
-                  </div>
-                  <input id="map-settings-name" type="text" autocomplete="off" class="form-control" placeholder="My New Map!">
-                </div>
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="map-settings-add-team-members">Teammates</span>
-                  </div>
-                  <input id="map-settings-add-team-members" type="username" autocomplete="off" class="form-control" placeholder="Comma Separated List of Usernames">
-                </div>
-                <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" id="map-settings-public">
-                  <label class="custom-control-label" for="map-settings-public">Make map public?</label>
-                </div>
-                <br>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
-            </div>
+          <div id="map-modals">
           </div>
         </div>
       </div>
@@ -165,26 +100,6 @@
       <!-- view my maps, team maps, fav maps, and popular maps (most favorites) if public -->
       <div id="container-view-maps">
         <div id="maps-viewer-wrapper">
-        </div>
-        <!-- Map editor modal -->
-        <div class="modal fade" id="map-editor-modal" tabindex="-1" role="dialog">
-          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
-            <div class="modal-content map-editor-modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Map Editor</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                  <span>&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div id="map-edit-frame">
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button id="modal-view-points-save" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

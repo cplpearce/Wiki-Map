@@ -1,9 +1,9 @@
 /* Create map container */
-#container-create-map {
+#container-map {
   height: 92vh;
   width: 100%;
 }
-#create-map-toolbar {
+#map-toolbar {
   position: absolute;
   pointer-events: auto;
   z-index: 5000;
@@ -22,6 +22,6 @@
 .point-image {
   max-width: 200px;
   max-height: 200px;
-  width: 200px;
-  height: 200px;
+  width: 100%;
+  height: 100%;
 }
