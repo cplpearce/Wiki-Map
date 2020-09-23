@@ -35,6 +35,7 @@ module.exports = (db) => {
   ////////////////////
 
   router.get("/", (req, res) => {
+    console.log('wtf')
     db.query(`SELECT * FROM maps;`)
       .then(data => {
         const user_id  = req.session.user_id;
