@@ -34,9 +34,32 @@ module.exports = (db) => {
   /// Map specific ///
   ////////////////////
 
-  router.get("/", (req, res) => {
-    console.log('wtf')
-    db.query(`SELECT * FROM maps;`)
+  router.post("/", (req, res) => {
+    const subGroup = "favorite_maps"; //req.body.map_req;
+    let queryFilter = "";
+
+    switch (subGroup) {
+    case "public":
+      queryFilter = `WHERE private = FALSE`;
+      break;
+    case "my_maps":
+      queryFilter = `WHERE owner_id = ${req.session.user_id}`;
+      break;
+    case "team_maps":
+      queryFilter = `LEFT JOIN collaborations ON maps.id = map_id
+                     WHERE collaborations.user_id = ${req.session.user_id}`;
+      break;
+    case "favorite_maps":
+      queryFilter = `LEFT JOIN favorite_maps ON map_id = maps.id
+                     WHERE favorite_maps.user_id = ${req.session.user_id}`;
+      break;
+    case "popular":
+      //// based on recent favorites
+      break;
+    }
+
+    db.query(`SELECT * FROM maps
+              ${queryFilter};`)
       .then(data => {
         const user_id  = req.session.user_id;
         const maps = data.rows;
@@ -71,7 +94,7 @@ module.exports = (db) => {
 
   ///Creat new map
 
-  router.post("/", (req, res) => {
+  router.post("/create", (req, res) => {
     const mapTitle = req.body.map_name;
     const user_id = 1; //req.[some clue about the user]
     const public = req.body.map_public;
