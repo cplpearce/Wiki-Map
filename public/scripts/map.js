@@ -35,11 +35,30 @@ $( document ).ready(function() {
       zoom: 12,
   });
 
+  // If any layers exist remove them
+  function clearAllLayers() {
+    map.eachLayer(function (layer) {
+      layer._url || map.removeLayer(layer);
+    });
+  }
+
+  // Hide the toolbar buttons and remove any elements
+  function exitMapEdit() {
+    // Show the create map button
+    $( '#map-create-new' ).show();
+    // And hide all the map editor buttons
+    $( '[id|="map-edit"]' ).hide();
+    // Remove any layers
+    clearAllLayers()
+    // clear any set mapID
+    mapID = '';
+  }
+
   // Add the locate me button
   L.control.locate().addTo(map);
 
   // Add the geocoder
-  const geocoder = L.Control.geocoder({
+  L.Control.geocoder({
     iconLabel: true,
   }).addTo(map);
 
@@ -57,14 +76,10 @@ $( document ).ready(function() {
     map.invalidateSize();
   });
 
-  // To begin upon creating a new map
-  // When the create-new button is pressed
-  function editorEnable(mapID) {
-
+  // To begin a viewing session
+  function viewerEnable(mapID) {
     // If any layers exist remove them
-    map.eachLayer(function (layer) {
-      layer._url || map.removeLayer(layer);
-    });
+    clearAllLayers()
 
     // Create a feature group to hold any created points
     // For reference, a Feature Group is an advanced Layer Group
@@ -75,6 +90,63 @@ $( document ).ready(function() {
 
     // Set a point counter
     let pointCount = 1;
+
+    // First get an update the map metadata
+    $.get(`/maps/${mapID}`, function(mapData) {
+      $( '#map-settings-name' ).val(mapData[0].title);
+      $( '#map-settings-public' ).val(mapData[0].private);
+    })
+    // then pull the points from the map
+    $.get(`/maps/${mapID}/markers`, function(markerData) {
+      let pointCount = 1;
+      Object.values(markerData).forEach((markerRead) => {
+        const latlng = [markerRead.location.x, markerRead.location.y];
+        marker = new L.marker(latlng, {
+          pointNumber: pointCount,
+          title: markerRead.title,
+          description: markerRead.description,
+          image: markerRead.thumbnail_url,
+          id: markerRead.id,
+          draggable: true}
+          ).addTo(markerGroup);
+        pointCount += 1;
+        // Set the popoup for these new markers
+        marker.bindPopup(renderPopup(marker), {maxWidth : 200});
+
+          // Set a popup on mouseover
+        marker.on('mouseover', function() {
+          marker.setPopupContent(renderPopup(marker), {maxWidth : 200});
+          this.openPopup();
+        });
+        marker.bindTooltip(marker.options.title,
+          {
+            permanent: true,
+            direction: 'right',
+          });
+      });
+      const bounds = markerGroup.getBounds().pad(0.5);
+      map.fitBounds(bounds);
+    });
+  }
+  // End of mapViewer
+
+  // To begin upon creating a new map
+  // When the create-new button is pressed
+  function editorEnable(mapID) {
+
+    // If any layers exist remove them
+    clearAllLayers()
+
+    // Create a feature group to hold any created points
+    // For reference, a Feature Group is an advanced Layer Group
+    // with more features and methods.
+    const markerGroup = new L.FeatureGroup();
+    // And add it to the map
+    map.addLayer(markerGroup);
+
+    // Set a point counter
+    let pointCount = 1;
+
     // If editorEnable is passed with a map ID
     if (mapID) {
       // First get an update the map metadata
@@ -111,8 +183,13 @@ $( document ).ready(function() {
               direction: 'right',
             });
         });
-        const bounds = markerGroup.getBounds();
+        const bounds = markerGroup.getBounds().pad(0.5);
         map.fitBounds(bounds);
+
+        // Ctrl click delete
+        marker.on('click', function(event) {
+          if (event.originalEvent.ctrlKey) {markerGroup.removeLayer(event.target)};
+        });
       });
     }
 
@@ -293,12 +370,19 @@ $( document ).ready(function() {
         });
         postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
+<<<<<<< HEAD
         postNewMapData.map_private = $( '#map-settings-public' ).val() === 'on' ? true : false;
         console.log(postNewMapData)
         $.ajax({
           method: "PUT",
           url: `/maps/${mapID}`,
 
+=======
+        postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
+        $.ajax({
+          method: "PUT",
+          url: `/maps/${mapID}`,
+>>>>>>> c833d78f556fecaec3708fae10bc9bd208a3a8d8
           data: postNewMapData
         })
       } else {
@@ -314,32 +398,24 @@ $( document ).ready(function() {
         });
         postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
-        postNewMapData.map_private = $( '#map-settings-public' ).val() === 'on' ? true : false;
+        postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
         $.ajax({
           method: "POST",
-          url: "/create",
+          url: "/maps/create",
           data: postNewMapData
         })
       };
+      // Finally exit the editor
+      exitMapEdit();
+      // Add a toast
     });
-
-    // Hide the toolbar buttons and remove any elements
-    function exitMapEdit() {
-      // Show the create map button
-      $( '#map-create-new' ).show();
-      // And hide all the map editor buttons
-      $( '[id|="map-edit"]' ).hide();
-      // Remove the markerGroup
-      map.removeLayer(markerGroup);
-      // clear any set mapID
-      mapID = '';
-    }
 
     // Call exitMapEdit
     $( '#map-edit-cancel-btn' ).click(() => {
       exitMapEdit();
     });
   };
+  // End of mapEditor
 
   // Enable a new editor without importing any points
   $( '#map-create-new' ).on('click', () => {
@@ -348,11 +424,21 @@ $( document ).ready(function() {
   });
 
   // When a user clicks on 'view', open the Map window to view
-  // then on a map card, load the editor
+  // then on a map card edit button, load the editor
   $(document).on("click", "[id|='map-card-edit']" , function() {
     // Get the mapID by taking the button ID, splitting it, and taking the last value
     const mapID = this.id.split('-').slice(-1);
     $( '#view-map' ).trigger('click');
     editorEnable(mapID);
+  });
+
+  // When a user clicks on 'view', open the Map window to view
+  // then on a map card view button, load the viewer
+  $(document).on("click", "[id|='map-card-view']" , function() {
+    // Get the mapID by taking the button ID, splitting it, and taking the last value
+    const mapID = this.id.split('-').slice(-1);
+    $( '#view-map' ).trigger('click');
+    exitMapEdit();
+    viewerEnable(mapID);
   });
 });

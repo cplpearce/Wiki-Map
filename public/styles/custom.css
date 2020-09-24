@@ -13,9 +13,14 @@ body, p, span, div, strong {
   font-family: 'Ubuntu Condensed', 'Courier New', Courier, monospace;
 }
 .table > tbody {
+
   vertical-align: middle;
   text-align: center;
   font-size: 1.5em;
+}
+li {
+  font-size: 1em;
+  vertical-align: middle;
 }
 /* Classes */
 .navbar-brand {
