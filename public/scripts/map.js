@@ -131,6 +131,11 @@ $( document ).ready(function() {
             permanent: true,
             direction: 'right',
           });
+
+        // Close the popup on mouse out
+        marker.on('mouseout', () => {
+          marker.closePopup();
+        });
       });
       const bounds = markerGroup.getBounds().pad(0.5);
       map.fitBounds(bounds);
@@ -178,7 +183,7 @@ $( document ).ready(function() {
           // Set the popoup for these new markers
           marker.bindPopup(renderPopup(marker), {maxWidth : 200});
 
-            // Set a popup on mouseover
+          // Set a popup on mouseover
           marker.on('mouseover', function() {
             marker.setPopupContent(renderPopup(marker), {maxWidth : 200});
             this.openPopup();
@@ -188,6 +193,11 @@ $( document ).ready(function() {
               permanent: true,
               direction: 'right',
             });
+
+          // Close the popup on mouse out
+          marker.on('mouseout', () => {
+            marker.closePopup();
+          });
         });
         const bounds = markerGroup.getBounds().pad(0.5);
         map.fitBounds(bounds);
