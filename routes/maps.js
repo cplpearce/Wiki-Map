@@ -137,7 +137,7 @@ module.exports = (db) => {
     EXISTS(SELECT * FROM maps WHERE private = false) AS is_public,
     (SELECT COUNT(*) FROM favorite_maps WHERE map_id = maps.id AND active = TRUE AND private = FALSE) AS favorited
     FROM maps
-    JOIN collaborations ON map_id = maps.id
+    LEFT JOIN collaborations ON map_id = maps.id
     WHERE active = TRUE AND (private = FALSE OR owner_id = ${user_id} OR collaborations.user_id = ${user_id})
     ORDER BY favorited DESC;`)
       .then(data => {
