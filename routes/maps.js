@@ -77,7 +77,7 @@ module.exports = (db) => {
     EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on,
     (SELECT COUNT(*) FROM favorite_maps WHERE map_id = maps.id AND active = TRUE AND private = FALSE) AS favorited
     FROM maps
-    WHERE active = TRUE AND private = FALSE
+    WHERE active = TRUE AND (private = FALSE OR owner_id = ${user_id})
     ORDER BY favorited DESC;`)
       .then(data => {
         res.json(data.rows);
@@ -207,6 +207,8 @@ module.exports = (db) => {
   router.post("/:id/favorite", (req, res) => {
     const map_id = req.params.id;
     const user_id = req.session.user_id;
+
+
 
     db.query(`
     INSERT INTO favorite_maps (user_id, map_id)
