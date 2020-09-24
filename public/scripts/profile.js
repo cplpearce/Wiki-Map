@@ -3,7 +3,7 @@ $( document ).ready(() => {
     method: "get",
     url: "/users/user",
   }).then(data => {
-    const { name, email, location} = data.info;
+    const { name, email, location } = data.info;
     let favorited = "";
     let collabs = "";
 
@@ -14,7 +14,6 @@ $( document ).ready(() => {
     for (const collab of data.collabs) {
       collabs += `<li>${collab.collab_map}`;
     }
-
 
     const profileHtml = `<article class="profile-info style="display: block">
     <h1>${name}<h1>
