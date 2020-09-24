@@ -33,15 +33,22 @@ $( document ).ready(function() {
     </div>
     `
   };
+  /*
+  collaborator_on: false
+date_created: "2020-09-24T17:01:24.775Z"
+favorite: false
+id: 10
+last_updated: "2020-09-24T17:01:24.775Z"
+share_url: null
+title: "Cleric of the Arcane"
+*/
 
   // Get my maps on nav click
   $( "[id|='viewer']" ).click(function() {
     const map_req_type = this.id.split('-').slice(1).join('-');
-    $.ajax({
-      method: "POST",
-      url: "/maps",
-      data: { map_req : map_req_type },
-    }).then(function(res) {
+    $.get('/maps').then(function(res) {
+      console.log(map_req_type)
+      console.log(res)
       $( '#maps-viewer-wrapper' ).empty();
       Object.values(res.maps).forEach((map) => {
         console.log(map)

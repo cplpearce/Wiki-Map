@@ -98,14 +98,12 @@ $( document ).ready(function() {
     // And add it to the map
     map.addLayer(markerGroup);
 
-    // Set a point counter
-    let pointCount = 1;
-
     // First get an update the map metadata
     $.get(`/maps/${mapID}`, function(mapData) {
       $( '#map-settings-name' ).val(mapData[0].title);
       $( '#map-settings-public' ).val(mapData[0].private);
     })
+
     // then pull the points from the map
     $.get(`/maps/${mapID}/markers`, function(markerData) {
       let pointCount = 1;
