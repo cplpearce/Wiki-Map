@@ -6,6 +6,13 @@ $( document ).ready(function() {
   // Hide unused toolbar items
   $( '[id|="map-edit"]' ).hide();
 
+  // Clear any previous map entries
+  function zeroizeMapSettings() {
+    $( '#map-settings-name' ).val('My New Map!');
+    $( '#map-settings-public' ).checked = false;
+    $( '#map-settings-add-team-members' ).val('');
+  }
+
   // Set the popup internals
   function renderPopup(marker) {
     // In case there wasn't an image set, set it to '' so there's no img url error
@@ -160,7 +167,6 @@ $( document ).ready(function() {
       // then pull the points from the map
       $.get(`/maps/${mapID}/markers`, function(markerData) {
         Object.values(markerData).forEach((markerRead) => {
-          console.log(markerRead)
           const latlng = [markerRead.location.x, markerRead.location.y];
           marker = new L.marker(latlng, {
             pointNumber: pointCount,
@@ -210,7 +216,7 @@ $( document ).ready(function() {
 
     // Create a point when dblclicking basemap
     map.on('dblclick', (event) => {
-      const marker = new L.marker(event.latlng, {pointNumber: pointCount, title: `Point ${pointCount}`, description: '', image: '', draggable: true}).addTo(markerGroup);
+      const marker = new L.marker(event.latlng, {pointNumber: pointCount, title: `Point ${pointCount}`, description: 'A brief point description!', image: '', draggable: true}).addTo(markerGroup);
       marker.bindPopup(renderPopup(marker), {maxWidth : 200});
       // set it's Tooltip to its name
       marker.bindTooltip(marker.options.title,
@@ -250,7 +256,7 @@ $( document ).ready(function() {
             <td>${marker._latlng.lat.toFixed(5)}</td>
             <td>${marker._latlng.lng.toFixed(5)}</td>
             <td><input onClick="this.select();" value="${marker.options.title}" placeholder="A name for your pyn" class="form-control" id="point-${marker.options.pointNumber}-title"></input></td>
-            <td><input onClick="this.select();" value="${marker.options.description}" class="form-control" placeholder="A brief pyn description"  id="point-${marker.options.pointNumber}-description"></input></td>
+            <td><input onClick="this.select();" value="${marker.options.description}" class="form-control" placeholder="A sort description of my new point."  id="point-${marker.options.pointNumber}-description"></input></td>
             <td><input onClick="this.select();" value="${marker.options.image}" class="form-control" placeholder="Max 200px*200px" id="point-${marker.options.pointNumber}-image"></input></td>
           </tr>
         `);
@@ -285,7 +291,7 @@ $( document ).ready(function() {
     });
 
     // POST or Update map to server
-    $( '#map-edit-post-btn' ).click(function() {
+    $( '#map-edit-post-btn' ).unbind().click(function() {
       const postNewMapData = {};
       if (mapID) {
         // PUT updated map
@@ -301,8 +307,7 @@ $( document ).ready(function() {
         });
         postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
-        postNewMapData.map_private = $( '#map-settings-public' ).val() === 'on' ? true : false;
-        console.log(postNewMapData)
+        postNewMapData.map_private = $( '#map-settings-public' )[0].checked;
         $.ajax({
           method: "PUT",
           url: `/maps/${mapID}`,
@@ -321,7 +326,8 @@ $( document ).ready(function() {
         });
         postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
-        postNewMapData.map_private = $( '#map-settings-public' ).val() === 'on' ? true : false;
+        postNewMapData.map_private = $( '#map-settings-public' )[0].checked;
+        console.log(postNewMapData)
         $.ajax({
           method: "POST",
           url: "/maps/create",
@@ -342,10 +348,8 @@ $( document ).ready(function() {
 
   // Enable a new editor without importing any points
   $( '#map-create-new' ).on('click', () => {
-    $( '#map-settings-name' ).val('');
-    $( '#map-settings-public' ).val('');
-    $( '#map-settings-add-team-members' ).val('');
-    mapID = '';
+    zeroizeMapSettings();
+    mapID = null;
     editorEnable()
   });
 

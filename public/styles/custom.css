@@ -83,3 +83,10 @@ input.profile-settings {
 .leaflet-container.marker-cursor-enabled {
   cursor: url(../img/cursor/pin-svg.svg), auto;
 }
+.form-check {
+  font-size: 1.5em;
+}
+.form-check-input{
+  height: 1em;
+  width: 1em;
+}

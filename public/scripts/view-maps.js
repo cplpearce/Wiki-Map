@@ -44,6 +44,7 @@ $( document ).ready(function() {
     }).then(function(res) {
       $( '#maps-viewer-wrapper' ).empty();
       Object.values(res.maps).forEach((map) => {
+        console.log(map)
         if (map_req_type === 'public-maps') {
           $( '#maps-viewer-wrapper' ).append(mapCardViewer(map.id, map.title, map.date_created));
         } else {
@@ -53,6 +54,7 @@ $( document ).ready(function() {
     });
   })
 
+  // Make map a favorite
   $(document).on("click", "[id|='map-card-favorite']" , function() {
     // Get the mapID by taking the button ID, splitting it, and taking the last value
     const mapID = this.id.split('-').slice(-1);
