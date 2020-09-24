@@ -1,37 +1,31 @@
 // A $( document ).ready() listner
 $( document ).ready(function() {
 
-  const mapCardOwner = (map) => {
+  const buildMapCard = (map, edit = true) => {
     date = new Date(map.date_created);
-    return `
-    <div class="card map-card m-1">
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item view-title text-center align-middle my-auto"><strong>${map.title}</strong></li>
-        <li class="list-group-item view-date">Created: ${date.toDateString()}</li>
-        <li class="list-group-item view-buttons">
-          <button id="map-card-edit-${map.id}" type="button" class="btn btn-primary btn-block">Edit</button>
-          <button id="map-card-view-${map.id}" type="button" class="btn btn-primary btn-block">View</button>
-          <button id="map-card-favorite-${map.id}" type="button" class="btn btn-warning  btn-block">Favorite</button>
-        </li>
-      </ul>
-    </div>
-    `
-  };
 
-  const mapCardViewer = (map) => {
-    date = new Date(map.date_created);
-    return `
+    let mapCard = $( `
     <div class="card map-card m-1">
       <ul class="list-group list-group-flush">
         <li class="list-group-item view-title text-center align-middle my-auto"><strong>${map.title}</strong></li>
         <li class="list-group-item view-date">Created: ${date.toDateString()}</li>
-        <li class="list-group-item d-flex flex-column justify-content-between view-buttons">
-          <button id="map-card-view-${map.id}" type="button" class="btn btn-primary mx-2 btn-block">View</button>
-          <button id="map-card-favorite-${map.id}" type="button" class="btn btn-warning mx-2 btn-block">Favorite</button>
+        <li id="map-card-buttons-${map.id}" class="list-group-item view-buttons">
+          <button id="map-card-view-${map.id}" type="button" class="btn btn-primary btn-block">View</button>
+          <button id="map-card-favorite-${map.id}" type="button" class="btn btn-warning btn-block">Favorite</button>
         </li>
       </ul>
     </div>
-    `
+    ` );
+
+    if (map.favorite) {
+      $( `#map-card-favorite-${map.id}`, mapCard ).attr('class', 'btn btn-warning btn-block');
+    } else {
+      $( `#map-card-favorite-${map.id}`, mapCard ).attr('class', 'btn btn-secondary btn-block');
+    }
+    if (edit) {
+      $( `#map-card-buttons-${map.id}`, mapCard ).prepend(`<button id="map-card-edit-${map.id}" type="button" class="btn btn-primary btn-block">Edit</button>`);
+    }
+    return mapCard;
   };
 
   // Get my maps on nav click
@@ -40,31 +34,31 @@ $( document ).ready(function() {
     $.get('/maps').then(function(res) {
       $( '#maps-viewer-wrapper' ).empty();
       res.forEach((map) => {
-        console.log(map)
         if (map_req_type === 'my-maps') {
         // View all this users maps, and collabs
-          if (map.is_owner || map.collaborator_on) {$( '#maps-viewer-wrapper' ).append(mapCardOwner(map))};
+          if (map.is_owner || map.collaborator_on) {$( '#maps-viewer-wrapper' ).append(buildMapCard(map))};
         } else if (map_req_type === 'team-maps') {
         // View all this users collabs
-          if (map.collaborator_on) {$( '#maps-viewer-wrapper' ).append(mapCardOwner(map))};
+          if (map.collaborator_on) {$( '#maps-viewer-wrapper' ).append(buildMapCard(map))};
         } else if (map_req_type === 'favorite-maps') {
         // View all this users favorite maps
           if (map.favorite) {
             if (map.is_owner || map.collaborator_on) {
-              $( '#maps-viewer-wrapper' ).append(mapCardOwner(map));
+              $( '#maps-viewer-wrapper' ).append(buildMapCard(map));
             } else {
-              $( '#maps-viewer-wrapper' ).append(mapCardViewer(map));
+              $( '#maps-viewer-wrapper' ).append(buildMapCard(map, false));
             }
           }
         } else if (map_req_type === 'public-maps') {
         // View all public map (users map, any other public maps)
-          if (map.is_owner || map.collaborator_on) {
-            $( '#maps-viewer-wrapper' ).append(mapCardOwner(map));
-          } else {
-            $( '#maps-viewer-wrapper' ).append(mapCardViewer(map));
+          if (map.is_owner) {
+            $( '#maps-viewer-wrapper' ).append(buildMapCard(map));
+          } else if (!map.is_private) {
+            $( '#maps-viewer-wrapper' ).append(buildMapCard(map, false));
           }
         }
       });
+
     });
   })
 
