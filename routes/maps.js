@@ -75,9 +75,11 @@ module.exports = (db) => {
     SELECT id, title, date_created, last_updated, share_url,
     EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${user_id} AND map_id =maps.id) AS favorite,
     EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on,
+    EXISTS(SELECT * FROM users WHERE users.id = maps.owner_id AND users.id = ${user_id}) AS is_owner,
     (SELECT COUNT(*) FROM favorite_maps WHERE map_id = maps.id AND active = TRUE AND private = FALSE) AS favorited
     FROM maps
-    WHERE active = TRUE AND (private = FALSE OR owner_id = ${user_id})
+    JOIN collaborations ON map_id = maps.id
+    WHERE active = TRUE AND (private = FALSE OR owner_id = ${user_id} OR collaborations.user_id = ${user_id})
     ORDER BY favorited DESC;`)
       .then(data => {
         res.json(data.rows);
@@ -112,7 +114,8 @@ module.exports = (db) => {
     if (!queryFilter) return new Error("Query did not work");
     db.query(`SELECT id, title, date_created, last_updated, share_url,
               EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${user_id} AND map_id =maps.id) AS favorite,
-              EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on
+              EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on,
+              EXISTS(SELECT * FROM users WHERE users.id = maps.owner_id AND users.id = ${user_id}) AS is_owner
               FROM maps
               ${queryFilter}
               AND active = TRUE;`)
@@ -173,7 +176,7 @@ module.exports = (db) => {
 
   router.post("/create", (req, res) => {
     const mapTitle = req.body.map_name;
-    const user_id = req.session.user_id;
+    const { user_id = 0 }  = req.session;
     const private = req.body.map_private;
     console.log(mapTitle, user_id, private);
     if (user_id) {
@@ -206,7 +209,11 @@ module.exports = (db) => {
 
   router.post("/:id/favorite", (req, res) => {
     const map_id = req.params.id;
-    const user_id = req.session.user_id;
+    const { user_id = 0 }  = req.session;
+
+    db.query(`
+    SELECT EXISTS (SELECT * FROM favorite_maps WHERE map_id = $1 AND user_id = ${user_id})
+    `, [map_id]).then(data => console.log(data.rows[0].exists));
 
 
 
@@ -252,7 +259,7 @@ module.exports = (db) => {
   router.put("/:id", (req, res) => {
     const { points, map_name, map_private, team  } = req.body;
     const map_id = req.params.id;
-    const user_id = req.session.user_id;
+    const { user_id = 0 }  = req.session;
     const sortedPoints = sortNewPoints(points);
     const updateMap =
     db.query(`UPDATE maps
