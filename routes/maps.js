@@ -213,24 +213,46 @@ module.exports = (db) => {
 
     db.query(`
     SELECT EXISTS (SELECT * FROM favorite_maps WHERE map_id = $1 AND user_id = ${user_id})
-    `, [map_id]).then(data => console.log(data.rows[0].exists));
-
-
-
-    db.query(`
-    INSERT INTO favorite_maps (user_id, map_id)
-    VALUES (${user_id}, ${map_id})
-    RETURNING *;
-    `)
+    `, [map_id])
       .then(data => {
-        const newMatch = data.rows;
-        res.json(newMatch);
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
+        console.log(data.rows[0].exists)
+        if (!data.rows[0].exists) {
+          db.query(`
+          INSERT INTO favorite_maps (user_id, map_id)
+          VALUES (${user_id}, ${map_id})
+          RETURNING *;
+          `)
+            .then(data => {
+              const newMatch = data.rows;
+              console.log("CREATE", newMatch)
+              res.json(newMatch);
+            })
+            .catch(err => {
+              res
+                .status(500)
+                .json({ error: err.message });
+            });
+        } else {
+          db.query(`
+          DELETE FROM favorite_maps
+          WHERE user_id = ${user_id} AND map_id = ${map_id}
+          RETURNING *;
+          `)
+            .then(data => {
+              const newMatch = data.rows;
+              console.log("DELETE", newMatch);
+              res.json(newMatch);
+            })
+            .catch(err => {
+              res
+                .status(500)
+                .json({ error: err.message });
+            });
+        }
       });
+
+
+
   });
 
   router.delete("/:map_id", (req, res) => {
