@@ -12,9 +12,10 @@ html {
 body, p, span, div, strong {
   font-family: 'Ubuntu Condensed', 'Courier New', Courier, monospace;
 }
-.table > tbody > tr > td {
+.table > tbody {
   vertical-align: middle;
   text-align: center;
+  font-size: 1.5em;
 }
 /* Classes */
 .navbar-brand {

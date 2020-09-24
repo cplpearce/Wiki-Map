@@ -38,7 +38,7 @@ module.exports = (db) => {
     const subGroup = req.body.map_req;
     let queryFilter = "";
     switch (subGroup) {
-    case "public":
+    case "public-maps":
       queryFilter = `WHERE private = FALSE`;
       break;
     case "my-maps":
