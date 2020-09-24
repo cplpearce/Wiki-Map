@@ -72,7 +72,7 @@ module.exports = (db) => {
   router.get("/", (req,res) => {
     const { user_id = 0 }  = req.session;
     db.query(`
-    SELECT title, date_created, last_updated, share_url,
+    SELECT id, title, date_created, last_updated, share_url,
     EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${user_id} AND map_id =maps.id) AS favorite,
     EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on,
     (SELECT COUNT(*) FROM favorite_maps WHERE map_id = maps.id AND active = TRUE AND private = FALSE) AS favorited
@@ -91,28 +91,26 @@ module.exports = (db) => {
 
   router.post("/", (req, res) => {
     const subGroup = req.body.map_req;
+    const { user_id = 0 } = req.session;
     let queryFilter = "";
     switch (subGroup) {
     case "public-maps":
       queryFilter = `WHERE private = FALSE`;
       break;
     case "my-maps":
-      queryFilter = `WHERE owner_id = ${req.session.user_id}`;
+      queryFilter = `WHERE owner_id = ${user_id}`;
       break;
     case "team-maps":
       queryFilter = `LEFT JOIN collaborations ON maps.id = map_id
-                     WHERE collaborations.user_id = ${req.session.user_id}`;
+                     WHERE collaborations.user_id = ${user_id}`;
       break;
     case "favorite-maps":
       queryFilter = `LEFT JOIN favorite_maps ON map_id = maps.id
-                     WHERE favorite_maps.user_id = ${req.session.user_id}`;
-      break;
-    case "popular":
-      //// based on most favorited
+                     WHERE favorite_maps.user_id = ${user_id}`;
       break;
     }
     if (!queryFilter) return new Error("Query did not work");
-    db.query(`SELECT title, date_created, last_updated, share_url,
+    db.query(`SELECT id, title, date_created, last_updated, share_url,
               EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS favorite,
               EXISTS(SELECT * FROM collaborations WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS collaborator_on
               FROM maps
