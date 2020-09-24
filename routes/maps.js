@@ -70,11 +70,11 @@ module.exports = (db) => {
 
 
   router.get("/", (req,res) => {
-    if (!req.session.user_id) req.session.user_id = 0;
+    const { user_id = 0 }  = req.session;
     db.query(`
     SELECT title, date_created, last_updated, share_url,
-    EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS favorite,
-    EXISTS(SELECT * FROM collaborations WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS collaborator_on,
+    EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${user_id} AND map_id =maps.id) AS favorite,
+    EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on,
     (SELECT COUNT(*) FROM favorite_maps WHERE map_id = maps.id AND active = TRUE AND private = FALSE) AS favorited
     FROM maps
     WHERE active = TRUE AND private = FALSE
