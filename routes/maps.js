@@ -78,7 +78,8 @@ module.exports = (db) => {
     EXISTS(SELECT * FROM users WHERE users.id = maps.owner_id AND users.id = ${user_id}) AS is_owner,
     (SELECT COUNT(*) FROM favorite_maps WHERE map_id = maps.id AND active = TRUE AND private = FALSE) AS favorited
     FROM maps
-    WHERE active = TRUE AND (private = FALSE OR owner_id = ${user_id})
+    JOIN collaborations ON map_id = maps.id
+    WHERE active = TRUE AND (private = FALSE OR owner_id = ${user_id} OR collaborations.user_id = ${user_id})
     ORDER BY favorited DESC;`)
       .then(data => {
         res.json(data.rows);
