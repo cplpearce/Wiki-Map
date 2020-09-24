@@ -111,8 +111,8 @@ module.exports = (db) => {
     }
     if (!queryFilter) return new Error("Query did not work");
     db.query(`SELECT id, title, date_created, last_updated, share_url,
-              EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS favorite,
-              EXISTS(SELECT * FROM collaborations WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS collaborator_on
+              EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${user_id} AND map_id =maps.id) AS favorite,
+              EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on
               FROM maps
               ${queryFilter}
               AND active = TRUE;`)
@@ -252,11 +252,12 @@ module.exports = (db) => {
     const map_id = req.params.id;
     const user_id = req.session.user_id;
     const sortedPoints = sortNewPoints(points);
-    console.log(map_id ,map_name, map_private);
-    const updateMap = db.query(`UPDATE maps
-                                  SET (title, private) = ($1, $2)
-                                  WHERE id = ${map_id};`,
-                                  [`${map_name}`, `${map_private}`]);
+    const updateMap =
+    db.query(`UPDATE maps
+    SET (title, private) = ($1, $2)
+    WHERE id = ${map_id};`,
+    [`${map_name}`, `${map_private}`]);
+
     db.query(`
     UPDATE markers
       SET (active) = (FALSE)
@@ -265,9 +266,6 @@ module.exports = (db) => {
       .then(updateMarkers(sortedPoints.old, db))
       .then(addNewMarkers(req.body.points, map_id, user_id, db))
       .catch(err => console.log(err));
-
-
-
   });
 
 //   router.put("/:map_id/markers/:marker_id", (req, res) => {
