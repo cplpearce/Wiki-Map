@@ -283,7 +283,7 @@ $( document ).ready(function() {
           return {
             title: marker.options.title,
             description: marker.options.description,
-            url: marker.options.image,
+            image_url: marker.options.image,
             lat: marker._latlng.lat,
             lon: marker._latlng.lng,
             id: marker.options.id,
@@ -291,11 +291,11 @@ $( document ).ready(function() {
         });
         postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
-        postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
+        postNewMapData.map_private = $( '#map-settings-public' ).val() === 'on' ? true : false;
         console.log(postNewMapData)
         $.ajax({
           method: "PUT",
-          url: "/maps/create",
+          url: `/maps/${mapID}`,
           data: postNewMapData
         })
       } else {
@@ -306,14 +306,14 @@ $( document ).ready(function() {
           return {
             title: marker.options.title,
             description: marker.options.description,
-            url: marker.options.image,
+            image_url: marker.options.image,
             lat: marker._latlng.lat,
             lon: marker._latlng.lng,
           };
         });
         postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
-        postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
+        postNewMapData.map_private = $( '#map-settings-public' ).val() === 'on' ? true : false;
         $.ajax({
           method: "POST",
           url: "/maps/create",
