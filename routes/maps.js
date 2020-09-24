@@ -69,7 +69,6 @@ const sortNewPoints = (points) => {
 };
 
 const compareTable = (objects, arr) => {
-  console.log("ELEMENT", arr);
   const result = arr.map(element => {
     for (const object of objects) {
       if (object.name === element) {
@@ -81,24 +80,22 @@ const compareTable = (objects, arr) => {
 };
 
 const generatePairs = (team, map_id, db) => {
-  console.log("TEAM", team)
-  getUsersIdName(db)
+  return getUsersIdName(db)
     .then(usertable => {
-  const usernames = team.split(",");
-  const pairs = [];
-  console.log(compareTable(usertable.rows, usernames));
+      const usernames = team.split(",");
+      const pairs = [];
+      const userIds = compareTable(usertable.rows, usernames);
 
-  for (const username of usernames) {
-    pairs.push( [map_id]);
-  }
-  return pairs;
-})
+      for (const userId of userIds) {
+        pairs.push([userId, Number(map_id)]);
+      }
+      return pairs;
+    });
 };
 
 
 const updateCollab = (pair, db) => {
   const [ user_id, map_id ] = pair;
-  console.log("PAIR", pair)
   db.query(`
   SELECT EXISTS (SELECT * FROM collaborations WHERE map_id = $1 AND user_id = ${user_id})
   `, [map_id])
@@ -134,7 +131,7 @@ module.exports = (db) => {
     EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${user_id} AND map_id =maps.id) AS favorite,
     EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on,
     EXISTS(SELECT * FROM users WHERE users.id = maps.owner_id AND users.id = ${user_id}) AS is_owner,
-    EXISTS(SELECT * FROM maps WHERE private = false) AS is_public,
+    private AS is_private,
     (SELECT COUNT(*) FROM favorite_maps WHERE map_id = maps.id AND active = TRUE AND private = FALSE) AS favorited
     FROM maps
     LEFT JOIN collaborations ON map_id = maps.id
@@ -237,7 +234,6 @@ module.exports = (db) => {
     const mapTitle = req.body.map_name;
     const { user_id = 0 }  = req.session;
     const private = req.body.map_private;
-    console.log(mapTitle, user_id, private);
     if (user_id) {
       db.query(
         `INSERT INTO maps (title, owner_id, private)
@@ -273,7 +269,6 @@ module.exports = (db) => {
     SELECT EXISTS (SELECT * FROM favorite_maps WHERE map_id = $1 AND user_id = ${user_id})
     `, [map_id])
       .then(data => {
-        console.log(data.rows[0].exists)
         if (!data.rows[0].exists) {
           db.query(`
           INSERT INTO favorite_maps (user_id, map_id)
@@ -282,7 +277,6 @@ module.exports = (db) => {
           `)
             .then(data => {
               const newMatch = data.rows;
-              console.log("CREATE", newMatch)
               res.json(newMatch);
             })
             .catch(err => {
@@ -336,16 +330,15 @@ module.exports = (db) => {
 
 
   router.put("/:id", (req, res) => {
-    console.log(`THIS IS BODY`, req.body)
     const { points, map_name, map_private, team  } = req.body;
     const map_id = req.params.id;
     const { user_id = 0 }  = req.session;
     const sortedPoints = sortNewPoints(points);
-    console.log(`THIS IS TEAM ${team}`)
+
+
     generatePairs(team, map_id, db)
       .then(collabPairs => {
         for (const pair of collabPairs) {
-          console.log("HEEEEEY");
           updateCollab(pair, db);
         }
       });
