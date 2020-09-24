@@ -52,6 +52,15 @@ const getUsersIdName = (db) => {
   `);
 };
 
+const getCollabNames = (map_id, db) => {
+  return db.query(`
+    SELECT name FROM users
+    JOIN collaborations ON user_id = users.id
+    JOIN maps ON map_id = maps.id
+    WHERE maps.id = $1;
+  `, [map_id]);
+};
+
 const sortNewPoints = (points) => {
   const sorted = {
     old : [],
@@ -211,15 +220,16 @@ module.exports = (db) => {
 ///// get map details
   router.get("/:id", (req, res) => {
     const map_id = req.params.id;
-    db.query(
+    const getMapDetails = db.query(
       `SELECT *
       FROM maps
       WHERE id = $1 AND maps.active = TRUE;`,
       [map_id])
-      .then(data => {
-        const users = data.rows;
-        res.json(users);
-      })
+
+    const collabName = getCollabNames(map_id, db);
+
+    Promise.all([getMapDetails, collabName])
+      .then(data => res.json({ maps : data[0].rows[0], collaborators : data[1].rows }))
       .catch(err => {
         res
           .status(500)
