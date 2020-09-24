@@ -112,9 +112,9 @@ module.exports = (db) => {
       break;
     }
     if (!queryFilter) return new Error("Query did not work");
-    db.query(`SELECT title, date_created, last_updated, share_url
+    db.query(`SELECT title, date_created, last_updated, share_url,
               EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS favorite,
-              EXISTS(SELECT * FROM collaborations WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS collaborator_on,
+              EXISTS(SELECT * FROM collaborations WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS collaborator_on
               FROM maps
               ${queryFilter}
               AND active = TRUE;`)
