@@ -115,7 +115,7 @@ $( document ).ready(function() {
           description: markerRead.description,
           image: markerRead.thumbnail_url,
           id: markerRead.id,
-          draggable: true}
+          draggable: false}
           ).addTo(markerGroup);
         pointCount += 1;
         // Set the popoup for these new markers
@@ -289,6 +289,7 @@ $( document ).ready(function() {
     });
 
     // POST or Update map to server
+    // You HAVE to unbind or it will increment POSTS
     $( '#map-edit-post-btn' ).unbind().click(function() {
       const postNewMapData = {};
       if (mapID) {
@@ -325,7 +326,6 @@ $( document ).ready(function() {
         postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
         postNewMapData.map_private = $( '#map-settings-public' )[0].checked;
-        console.log(postNewMapData)
         $.ajax({
           method: "POST",
           url: "/maps/create",

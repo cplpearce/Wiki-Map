@@ -47,15 +47,26 @@ title: "Cleric of the Arcane"
   $( "[id|='viewer']" ).click(function() {
     const map_req_type = this.id.split('-').slice(1).join('-');
     $.get('/maps').then(function(res) {
-      console.log(map_req_type)
-      console.log(res)
       $( '#maps-viewer-wrapper' ).empty();
-      Object.values(res.maps).forEach((map) => {
-        console.log(map)
-        if (map_req_type === 'public-maps') {
-          $( '#maps-viewer-wrapper' ).append(mapCardViewer(map.id, map.title, map.date_created));
-        } else {
+      res.forEach((map) => {
+        if (map_req_type === 'my-maps') {
           $( '#maps-viewer-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created));
+        } else if (map_req_type === 'team-maps') {
+          if (map.collaborator_on) {$( '#maps-viewer-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created))};
+        } else if (map_req_type === 'favorite-maps') {
+          if (map.favorite) {
+            if (map.is_owner || map.collaborator_on) {
+              $( '#maps-viewer-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created));
+            } else {
+              $( '#maps-viewer-wrapper' ).append(mapCardViewer(map.id, map.title, map.date_created));
+            }
+          }
+        } else if (map_req_type === 'public-maps') {
+          if (map.is_owner || map.collaborator_on) {
+            $( '#maps-viewer-wrapper' ).append(mapCardOwner(map.id, map.title, map.date_created));
+          } else {
+            $( '#maps-viewer-wrapper' ).append(mapCardViewer(map.id, map.title, map.date_created));
+          }
         }
       });
     });
