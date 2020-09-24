@@ -5,7 +5,6 @@ $( document ).ready(() => {
     method: "GET",
     url: "/users/user",
   }).then(data => {
-    console.log(data)
     // set name/email/location to data.info
     const { name, email, location } = data.info;
     // init fav/collabs
