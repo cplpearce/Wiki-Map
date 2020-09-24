@@ -60,6 +60,8 @@ $( document ).ready(function() {
   // Add the geocoder
   L.Control.geocoder({
     iconLabel: true,
+    placeholder: 'Search for Address...',
+    collapsed: false,
   }).addTo(map);
 
   // Allow a custom cursor over map

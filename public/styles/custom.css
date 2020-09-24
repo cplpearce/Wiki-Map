@@ -22,6 +22,9 @@ li {
   font-size: 1em;
   vertical-align: middle;
 }
+ul {
+  height: 100%;
+}
 /* Classes */
 .navbar-brand {
   filter: invert(1);

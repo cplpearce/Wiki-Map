@@ -31,15 +31,21 @@
   width: 1.5em;
 }
 .view-title{
-  height: 5em;
   max-height: 5em;
-  font-size: 1rem;
+  font-size: 1em;
+  text-align: center;
+  vertical-align: middle;
 }
 .view-date {
   max-height: 3em;
 }
-view-buttons {
-  max-height: 6em;
+.view-buttons {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-items: center;
+  justify-content: end;
+  margin-top: auto;
 }
 .card {
   width: 24vw;
