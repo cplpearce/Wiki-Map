@@ -102,8 +102,17 @@ const generatePairs = (team, map_id, db) => {
     });
 };
 
+const updateCollab = (team, map_id, db) => {
+  generatePairs(team, map_id, db)
+    .then(collabPairs => {
+      for (const pair of collabPairs) {
+        collabQuery(pair, db);
+      }
+    });
+};
 
-const updateCollab = (pair, db) => {
+
+const collabQuery = (pair, db) => {
   const [ user_id, map_id ] = pair;
   db.query(`
   SELECT EXISTS (SELECT * FROM collaborations WHERE map_id = $1 AND user_id = ${user_id})
@@ -136,16 +145,15 @@ module.exports = (db) => {
   router.get("/", (req,res) => {
     const { user_id = 0 }  = req.session;
     db.query(`
-    SELECT id, title, date_created, last_updated, share_url,
+    SELECT DISTINCT ON (id) id, title, date_created, last_updated, share_url,
     EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${user_id} AND map_id =maps.id) AS favorite,
     EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on,
     EXISTS(SELECT * FROM users WHERE users.id = maps.owner_id AND users.id = ${user_id}) AS is_owner,
     private AS is_private,
-    (SELECT COUNT(*) FROM favorite_maps WHERE map_id = maps.id AND active = TRUE AND private = FALSE) AS favorited
+    (SELECT COUNT(*) FROM favorite_maps WHERE map_id = maps.id AND active = TRUE) AS favorited
     FROM maps
-    LEFT JOIN collaborations ON map_id = maps.id
-    WHERE active = TRUE AND (private = FALSE OR owner_id = ${user_id} OR collaborations.user_id = ${user_id})
-    ORDER BY favorited DESC;`)
+    JOIN collaborations ON map_id = maps.id
+    WHERE active = TRUE AND (private = FALSE OR owner_id = ${user_id} OR collaborations.user_id = ${user_id});`)
       .then(data => {
         res.json(data.rows);
       })
@@ -241,18 +249,27 @@ module.exports = (db) => {
   ///Creat new map
 
   router.post("/create", (req, res) => {
+    const { points, map_name, map_private, team  } = req.body;
     const mapTitle = req.body.map_name;
     const { user_id = 0 }  = req.session;
-    const private = req.body.map_private;
     if (user_id) {
+
+
+
+
       db.query(
         `INSERT INTO maps (title, owner_id, private)
-        VALUES ($1, ${user_id}, ${private})
+        VALUES ($1, ${user_id}, ${map_private})
         RETURNING *;`,
         [mapTitle])
         .then(data => {
           const map_id = data.rows[0].id;
           addNewMarkers(req.body.points, map_id, user_id, db);
+          return data;
+        })
+        .then(data => {
+          const map_id = data.rows[0].id;
+          updateCollab(team, map_id, db);
           return data;
         })
         .then(data => getMapById(data.rows[0].id, db))
@@ -275,44 +292,46 @@ module.exports = (db) => {
   router.post("/:id/favorite", (req, res) => {
     const map_id = req.params.id;
     const { user_id = 0 }  = req.session;
-    db.query(`
-    SELECT EXISTS (SELECT * FROM favorite_maps WHERE map_id = $1 AND user_id = ${user_id})
-    `, [map_id])
-      .then(data => {
-        if (!data.rows[0].exists) {
-          db.query(`
-          INSERT INTO favorite_maps (user_id, map_id)
-          VALUES (${user_id}, ${map_id})
-          RETURNING *;
-          `)
-            .then(data => {
-              const newMatch = data.rows;
-              res.json(newMatch);
-            })
-            .catch(err => {
-              res
-                .status(500)
-                .json({ error: err.message });
-            });
-        } else {
-          db.query(`
-          DELETE FROM favorite_maps
-          WHERE user_id = ${user_id} AND map_id = ${map_id}
-          RETURNING *;
-          `)
-            .then(data => {
-              const delRow = data.rows;
-              res.json(delRow);
-            })
-            .catch(err => {
-              res
-                .status(500)
-                .json({ error: err.message });
-            });
-        }
-      });
-
-
+    if (user_id) {
+      db.query(`
+      SELECT EXISTS (SELECT * FROM favorite_maps WHERE map_id = $1 AND user_id = ${user_id})
+      `, [map_id])
+        .then(data => {
+          if (!data.rows[0].exists) {
+            db.query(`
+            INSERT INTO favorite_maps (user_id, map_id)
+            VALUES (${user_id}, ${map_id})
+            RETURNING *;
+            `)
+              .then(data => {
+                const newMatch = data.rows;
+                res.json(newMatch);
+              })
+              .catch(err => {
+                res
+                  .status(500)
+                  .json({ error: err.message });
+              });
+          } else {
+            db.query(`
+            DELETE FROM favorite_maps
+            WHERE user_id = ${user_id} AND map_id = ${map_id}
+            RETURNING *;
+            `)
+              .then(data => {
+                const delRow = data.rows;
+                res.json(delRow);
+              })
+              .catch(err => {
+                res
+                  .status(500)
+                  .json({ error: err.message });
+              });
+          }
+        });
+    } else {
+      res.send('please log in to create maps');
+    }
 
   });
 
@@ -346,12 +365,8 @@ module.exports = (db) => {
     const sortedPoints = sortNewPoints(points);
 
 
-    generatePairs(team, map_id, db)
-      .then(collabPairs => {
-        for (const pair of collabPairs) {
-          updateCollab(pair, db);
-        }
-      });
+    updateCollab(team, map_id, db);
+
 
     const updateMap =
     db.query(`UPDATE maps
