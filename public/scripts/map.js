@@ -77,14 +77,16 @@ $( document ).ready(function() {
     let pointCount = 1;
     // If editorEnable is passed with a map ID
     if (mapID) {
+      // First get an update the map metadata
       $.get(`/maps/${mapID}`, function(mapData) {
         $( '#map-settings-name' ).val(mapData[0].title);
         $( '#map-settings-public' ).val(mapData[0].private);
       })
-      // GET MAP NAME, ETC HERE
+      // then pull the points from the map
       $.get(`/maps/${mapID}/markers`, function(markerData) {
-        const pointCount = 1;
+        let pointCount = 1;
         Object.values(markerData).forEach((markerRead) => {
+          console.log(markerRead)
           const latlng = [markerRead.location.x, markerRead.location.y];
           marker = new L.marker(latlng, {
             pointNumber: pointCount,
@@ -94,6 +96,7 @@ $( document ).ready(function() {
             id: markerRead.id,
             draggable: true}
             ).addTo(markerGroup);
+          pointCount += 1;
           // Set the popoup for these new markers
           marker.bindPopup(renderPopup(marker), {maxWidth : 200});
 
@@ -275,10 +278,9 @@ $( document ).ready(function() {
 
     // POST or Update map to server
     $( '#map-edit-post-btn' ).click(function() {
+      const postNewMapData = {};
       if (mapID) {
-        // POST new map
-        const postNewMapData = {};
-
+        // PUT updated map
         postNewMapData.points = markerGroup.getLayers().map((marker) => {
           return {
             title: marker.options.title,
@@ -296,12 +298,11 @@ $( document ).ready(function() {
         $.ajax({
           method: "PUT",
           url: `/maps/${mapID}`,
+
           data: postNewMapData
         })
       } else {
         // POST new map
-        const postNewMapData = {};
-
         postNewMapData.points = markerGroup.getLayers().map((marker) => {
           return {
             title: marker.options.title,
@@ -316,7 +317,7 @@ $( document ).ready(function() {
         postNewMapData.map_private = $( '#map-settings-public' ).val() === 'on' ? true : false;
         $.ajax({
           method: "POST",
-          url: "/maps/create",
+          url: "/create",
           data: postNewMapData
         })
       };
@@ -330,6 +331,8 @@ $( document ).ready(function() {
       $( '[id|="map-edit"]' ).hide();
       // Remove the markerGroup
       map.removeLayer(markerGroup);
+      // clear any set mapID
+      mapID = '';
     }
 
     // Call exitMapEdit
@@ -340,6 +343,7 @@ $( document ).ready(function() {
 
   // Enable a new editor without importing any points
   $( '#map-create-new' ).on('click', () => {
+    mapID = '';
     editorEnable()
   });
 
