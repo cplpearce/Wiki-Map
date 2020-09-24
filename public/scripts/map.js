@@ -370,19 +370,11 @@ $( document ).ready(function() {
         });
         postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
-<<<<<<< HEAD
         postNewMapData.map_private = $( '#map-settings-public' ).val() === 'on' ? true : false;
         console.log(postNewMapData)
         $.ajax({
           method: "PUT",
           url: `/maps/${mapID}`,
-
-=======
-        postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
-        $.ajax({
-          method: "PUT",
-          url: `/maps/${mapID}`,
->>>>>>> c833d78f556fecaec3708fae10bc9bd208a3a8d8
           data: postNewMapData
         })
       } else {

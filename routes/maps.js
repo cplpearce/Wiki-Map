@@ -152,7 +152,7 @@ module.exports = (db) => {
     const mapTitle = req.body.map_name;
     const user_id = req.session.user_id;
     const private = req.body.map_private;
-    console.log(mapTitle, user_id, private)
+    console.log(mapTitle, user_id, private);
     if (user_id) {
       db.query(
         `INSERT INTO maps (title, owner_id, private)
