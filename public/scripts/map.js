@@ -300,7 +300,7 @@ $( document ).ready(function() {
         });
         postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
-        postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
+        postNewMapData.map_private = $( '#map-settings-public' ).val() === 'on' ? true : false;
         $.ajax({
           method: "PUT",
           url: `/maps/${mapID}`,
@@ -319,7 +319,7 @@ $( document ).ready(function() {
         });
         postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
-        postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
+        postNewMapData.map_private = $( '#map-settings-public' ).val() === 'on' ? true : false;
         $.ajax({
           method: "POST",
           url: "/maps/create",
