@@ -301,6 +301,7 @@ $( document ).ready(function() {
         postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
         postNewMapData.map_private = $( '#map-settings-public' ).val() === 'on' ? true : false;
+        console.log(postNewMapData)
         $.ajax({
           method: "PUT",
           url: `/maps/${mapID}`,

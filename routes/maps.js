@@ -1,19 +1,20 @@
 const express = require('express');
 const router  = express.Router();
 
-const addNewMarkers = (newMarkers, map_id, db) => {
+const addNewMarkers = (newMarkers, map_id, user_id, db) => {
+
   const insertedMarkers = [];
+  if (!newMarkers) return insertedMarkers;
   for (const marker of newMarkers) {
-    const user_id = 1;
     const title = marker.title;
     const desc = marker.description;
     const markerPos = `(${marker.lat}, ${marker.lon})`;
-    // const thumbnailUrl = marker.thumbnailUrl; NOT FUCNTIONNAL
+    const image_url = marker.image_url;
     db.query(`
-    INSERT INTO markers (owner_id, map_id, title, description, location)
-    VALUES (${user_id}, ${map_id}, $1, $2, point${markerPos})
+    INSERT INTO markers (owner_id, map_id, title, description, location, thumbnail_url)
+    VALUES (${user_id}, ${map_id}, $1, $2, point${markerPos}, $3)
     RETURNING *;`
-    , [`${title}`, `${desc}`])
+    , [`${title}`, `${desc}`, `${image_url}`])
       .then((insertedMarker) => {
         insertedMarkers.push(insertedMarker);
       })
@@ -22,10 +23,43 @@ const addNewMarkers = (newMarkers, map_id, db) => {
   return insertedMarkers;
 };
 
+const updateMarkers = (points, db) => {
+  const updatedMarkers = [];
+  for (const point of points) {
+    const { description, id, lat, lon, title, image_url} = point;
+    const markerPos = `(${lat}, ${lon})`;
+    db.query(`
+  UPDATE markers
+    SET (description, location, title, thumbnail_url, active)
+    = ($1, point${markerPos}, $2, $3, TRUE)
+    WHERE id = ${id}
+    RETURNING *;`
+    , [`${description}`, `${title}`, `${image_url}`])
+      .then(data => updatedMarkers.push(data));
+  }
+  return updatedMarkers;
+};
+
 const getMapById = (id, db) => {
   return db.query(`
   SELECT * FROM maps WHERE id = ${id};
   `);
+};
+
+const sortNewPoints = (points) => {
+  const sorted = {
+    old : [],
+    new : []
+  };
+  if (!points) return sorted;
+  for (const point of points) {
+    if (point.id) {
+      sorted.old.push(point);
+    } else {
+      sorted.new.push(point);
+    }
+  }
+  return sorted;
 };
 
 module.exports = (db) => {
@@ -117,16 +151,17 @@ module.exports = (db) => {
   router.post("/create", (req, res) => {
     const mapTitle = req.body.map_name;
     const user_id = req.session.user_id;
-    const public = req.body.map_public;
+    const private = req.body.map_private;
+    console.log(mapTitle, user_id, private);
     if (user_id) {
       db.query(
         `INSERT INTO maps (title, owner_id, private)
-        VALUES ($1, ${user_id}, ${public})
+        VALUES ($1, ${user_id}, ${private})
         RETURNING *;`,
         [mapTitle])
         .then(data => {
           const map_id = data.rows[0].id;
-          addNewMarkers(req.body.points, map_id, db);
+          addNewMarkers(req.body.points, map_id, user_id, db);
           return data;
         })
         .then(data => getMapById(data.rows[0].id, db))
@@ -153,7 +188,7 @@ module.exports = (db) => {
     db.query(`
     INSERT INTO favorite_maps (user_id, map_id)
     VALUES (${user_id}, ${map_id})
-    RETURNING*;
+    RETURNING *;
     `)
       .then(data => {
         const newMatch = data.rows;
@@ -186,71 +221,72 @@ module.exports = (db) => {
       });
   });
 
-  ////////////////////////
-  /// Marker specific ///
-  ////////////////////////
-
-  router.post("/:map_id/markers/", (req, res) => {
-
-    // const point = {
-    //   ////Object [point] crafted here from [req]
-    // };
+  //////Update map
 
 
-
-    // ////Wrapped in a loop
-    // addNewPoint(point, db) ///METTONS
-    //   .then(data => {
-    //     const newPoints = data.rows;
-    //     res.json(newPoints);
-    //   })
-    //   .catch(err => {
-    //     res
-    //       .status(500)
-    //       .json({ error: err.message });
-    //   });
-  });
-
-  router.put("/:map_id/markers/:marker_id", (req, res) => {
-    const { marker_id } = req.params;
-    const column = 'title'; /// req body
-    const newVal = 'Ipsum 3000'; /// req body
-
+  router.put("/:id", (req, res) => {
+    const { points, map_name, map_private, team  } = req.body;
+    const map_id = req.params.id;
+    const user_id = req.session.user_id;
+    const sortedPoints = sortNewPoints(points);
+    console.log(map_id ,map_name, map_private);
+    const updateMap = db.query(`UPDATE maps
+                                  SET (title, private) = ($1, $2)
+                                  WHERE id = ${map_id};`,
+                                  [`${map_name}`, `${map_private}`]);
     db.query(`
     UPDATE markers
-    SET ${column} = $1
-    WHERE id = ${marker_id}
-    RETURNING id, title, ${column};
-    `, [newVal])
-      .then(data => {
-        const uptMarker = data.rows;
-        res.json(uptMarker);
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
-      });
+      SET (active) = (FALSE)
+      WHERE map_id = ${map_id}
+    `).then(updateMap)
+      .then(updateMarkers(sortedPoints.old, db))
+      .then(addNewMarkers(req.body.points, map_id, user_id, db))
+      .catch(err => console.log(err));
+
+
+
   });
 
-  router.delete("/:map_id/markers/:marker_id", (req, res) => {
-    const { marker_id } = req.params;
+//   router.put("/:map_id/markers/:marker_id", (req, res) => {
+//     const { marker_id } = req.params;
+//     const column = 'title'; /// req body
+//     const newVal = 'Ipsum 3000'; /// req body
 
-    db.query(`
-    UPDATE markers
-    SET active = false
-    WHERE id = ${marker_id}
-    RETURNING id, title, active;
-    `)
-      .then(data => {
-        const delMarker = data.rows;
-        res.json(delMarker);
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
-      });
-  });
+//     db.query(`
+//     UPDATE markers
+//     SET ${column} = $1
+//     WHERE id = ${marker_id}
+//     RETURNING id, title, ${column};
+//     `, [newVal])
+//       .then(data => {
+//         const uptMarker = data.rows;
+//         res.json(uptMarker);
+//       })
+//       .catch(err => {
+//         res
+//           .status(500)
+//           .json({ error: err.message });
+//       });
+//   });
+
+//   router.delete("/:map_id/markers/:marker_id", (req, res) => {
+//     const { marker_id } = req.params;
+
+//     db.query(`
+//     UPDATE markers
+//     SET active = false
+//     WHERE id = ${marker_id}
+//     RETURNING id, title, active;
+//     `)
+//       .then(data => {
+//         const delMarker = data.rows;
+//         res.json(delMarker);
+//       })
+//       .catch(err => {
+//         res
+//           .status(500)
+//           .json({ error: err.message });
+//       });
+//   });
   return router;
 };
