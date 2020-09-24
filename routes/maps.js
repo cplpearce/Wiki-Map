@@ -134,6 +134,7 @@ module.exports = (db) => {
     EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${user_id} AND map_id =maps.id) AS favorite,
     EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on,
     EXISTS(SELECT * FROM users WHERE users.id = maps.owner_id AND users.id = ${user_id}) AS is_owner,
+    EXISTS(SELECT * FROM maps WHERE private = false) AS is_public,
     (SELECT COUNT(*) FROM favorite_maps WHERE map_id = maps.id AND active = TRUE AND private = FALSE) AS favorited
     FROM maps
     JOIN collaborations ON map_id = maps.id
@@ -272,6 +273,7 @@ module.exports = (db) => {
     SELECT EXISTS (SELECT * FROM favorite_maps WHERE map_id = $1 AND user_id = ${user_id})
     `, [map_id])
       .then(data => {
+        console.log(data.rows[0].exists)
         if (!data.rows[0].exists) {
           db.query(`
           INSERT INTO favorite_maps (user_id, map_id)
@@ -280,6 +282,7 @@ module.exports = (db) => {
           `)
             .then(data => {
               const newMatch = data.rows;
+              console.log("CREATE", newMatch)
               res.json(newMatch);
             })
             .catch(err => {
@@ -307,20 +310,6 @@ module.exports = (db) => {
 
 
 
-    db.query(`
-    INSERT INTO favorite_maps (user_id, map_id)
-    VALUES (${user_id}, ${map_id})
-    RETURNING *;
-    `)
-      .then(data => {
-        const newMatch = data.rows;
-        res.json(newMatch);
-      })
-      .catch(err => {
-        res
-          .status(500)
-          .json({ error: err.message });
-      });
   });
 
   router.delete("/:map_id", (req, res) => {
