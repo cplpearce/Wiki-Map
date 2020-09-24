@@ -6,7 +6,6 @@ $( document ).ready(function() {
       username : $('#login-username').val(),
       password : $('#login-password').val()
     };
-
     $.ajax({
       method: "POST",
       url: "/login",
@@ -14,10 +13,14 @@ $( document ).ready(function() {
     }).then(data => {
       window.location.reload();
     });
+    location.reload();
   });
 
   $('#logout').click(() => {
     $.post("/login/logout");
     window.location.reload();
   });
+  $( '#login' ).click(() => {
+    $('#modalLoginForm').modal('toggle');
+  })
 });

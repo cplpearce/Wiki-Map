@@ -100,8 +100,8 @@ $( document ).ready(function() {
 
     // First get an update the map metadata
     $.get(`/maps/${mapID}`, function(mapData) {
-      $( '#map-settings-name' ).val(mapData[0].title);
-      $( '#map-settings-public' ).val(mapData[0].private);
+      $( '#map-settings-name' ).val(mapData.maps.title);
+      $( '#map-settings-public' ).val(mapData.maps.private);
     })
 
     // then pull the points from the map
@@ -166,8 +166,10 @@ $( document ).ready(function() {
     if (mapID) {
       // First get an update the map metadata
       $.get(`/maps/${mapID}`, function(mapData) {
-        $( '#map-settings-name' ).val(mapData[0].title);
-        $( '#map-settings-public' ).val(mapData[0].private);
+        console.log(mapData)
+        $( '#map-settings-name' ).val(mapData.maps.title);
+        $( '#map-settings-public' ).val(mapData.maps.private);
+        $( '#map-settings-add-team-members' ).val(mapData.collaborators);
       })
       // then pull the points from the map
       $.get(`/maps/${mapID}/markers`, function(markerData) {

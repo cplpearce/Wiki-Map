@@ -35,7 +35,7 @@ $( document ).ready(function() {
   };
 
   // Get my maps on nav click
-  $( '[id|="viewer"]' ).click(function() {
+  $(document).on("click", '[id|="viewer"]', function() {
     const map_req_type = this.id.split('-').slice(1).join('-');
     $.get('/maps').then(function(res) {
       $( '#maps-viewer-wrapper' ).empty();
