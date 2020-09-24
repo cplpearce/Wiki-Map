@@ -93,7 +93,7 @@ module.exports = (db) => {
 
 
 ///// get map details
-  router.get("/:id/markers", (req, res) => {
+  router.get("/:id", (req, res) => {
     const map_id = req.params.id;
     db.query(
       `SELECT *

@@ -63,7 +63,6 @@ $( document ).ready(function() {
 
     // If any layers exist remove them
     map.eachLayer(function (layer) {
-      console.log(layer)
       layer._url || map.removeLayer(layer);
     });
 
@@ -78,12 +77,14 @@ $( document ).ready(function() {
     let pointCount = 1;
     // If editorEnable is passed with a map ID
     if (mapID) {
-      // GET MAP NAME, ETC HERE
       $.get(`/maps/${mapID}`, function(mapData) {
-        // get Map name $( '#map-settings-name' ).val();
-        // get map privacy $( '#map-settings-public' ).val(mapData[0].active)
+        $( '#map-settings-name' ).val(mapData[0].title);
+        $( '#map-settings-public' ).val(mapData[0].private);
+      })
+      // GET MAP NAME, ETC HERE
+      $.get(`/maps/${mapID}/markers`, function(markerData) {
         const pointCount = 1;
-        Object.values(mapData).forEach((markerRead) => {
+        Object.values(markerData).forEach((markerRead) => {
           const latlng = [markerRead.location.x, markerRead.location.y];
           marker = new L.marker(latlng, {
             pointNumber: pointCount,
@@ -288,9 +289,10 @@ $( document ).ready(function() {
             id: marker.options.id,
           };
         });
+        postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
         postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
-        console.log(postNewMapData);
+        console.log(postNewMapData)
         $.ajax({
           method: "PUT",
           url: "/maps/create",
@@ -309,6 +311,7 @@ $( document ).ready(function() {
             lon: marker._latlng.lng,
           };
         });
+        postNewMapData.team = $( '#map-settings-add-team-members' ).val();
         postNewMapData.map_name = $( '#map-settings-name' ).val();
         postNewMapData.map_public = $( '#map-settings-public' ).val() === 'on' ? true : false;
         $.ajax({

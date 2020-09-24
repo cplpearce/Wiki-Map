@@ -6,7 +6,6 @@ $( document ).ready(function() {
     date = new Date(date);
     return `
     <div class="card map-card col-lg-2 col-md-3 col-4">
-      <img class="map-card-image" src="${'https://picsum.photos/200'}"/>
       <div class="card-body">
         <h5 class="card-title">Title: ${title}</h5>
         <p class="text-muted">Date: ${date.toDateString()}</span>
@@ -21,7 +20,6 @@ $( document ).ready(function() {
   const mapCardViewer = (id, title, date) => {
     return `
     <div class="card map-card col-lg-2 col-md-3 col-4">
-      <img class="map-card-image" src="${'https://picsum.photos/200'}"/>
       <div class="card-body">
         <h5 class="card-title">Title: ${title}</h5>
         <p class="text-muted">Date: ${new Date(date).toUTCString()}</span>
