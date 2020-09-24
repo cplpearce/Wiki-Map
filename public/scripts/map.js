@@ -126,16 +126,18 @@ $( document ).ready(function() {
           marker.setPopupContent(renderPopup(marker), {maxWidth : 200});
           this.openPopup();
         });
+
+        // Close the popup on mouse out
+        marker.on('mouseout', function() {
+          this.closePopup();
+        });
+
         marker.bindTooltip(marker.options.title,
           {
             permanent: true,
             direction: 'right',
           });
 
-        // Close the popup on mouse out
-        marker.on('mouseout', () => {
-          marker.closePopup();
-        });
       });
       const bounds = markerGroup.getBounds().pad(0.5);
       map.fitBounds(bounds);
@@ -195,8 +197,8 @@ $( document ).ready(function() {
             });
 
           // Close the popup on mouse out
-          marker.on('mouseout', () => {
-            marker.closePopup();
+          marker.on('mouseout', function() {
+            this.closePopup();
           });
         });
         const bounds = markerGroup.getBounds().pad(0.5);
@@ -241,8 +243,8 @@ $( document ).ready(function() {
       });
 
       // Close the popup on mouse out
-      marker.on('mouseout', () => {
-        marker.closePopup();
+      marker.on('mouseout', function() {
+        this.closePopup();
       });
 
       // Ctrl click delete
