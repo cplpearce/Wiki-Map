@@ -8,10 +8,10 @@ $( document ).ready(function() {
       <ul class="list-group list-group-flush">
         <li class="list-group-item view-title text-center align-middle my-auto"><strong>${title}</strong></li>
         <li class="list-group-item view-date">Created: ${date.toDateString()}</li>
-        <li class="list-group-item d-flex flex-column justify-content-between view-buttons">
-          <button id="map-card-edit-${id}" type="button" class="btn btn-primary mx-2 btn-block">Edit</button>
-          <button id="map-card-view-${id}" type="button" class="btn btn-primary mx-2 btn-block">View</button>
-          <button id="map-card-favorite-${id}" type="button" class="btn btn-warning mx-2 btn-block">Favorite</button>
+        <li class="list-group-item view-buttons">
+          <button id="map-card-edit-${id}" type="button" class="btn btn-primary btn-block">Edit</button>
+          <button id="map-card-view-${id}" type="button" class="btn btn-primary btn-block">View</button>
+          <button id="map-card-favorite-${id}" type="button" class="btn btn-warning  btn-block">Favorite</button>
         </li>
       </ul>
     </div>

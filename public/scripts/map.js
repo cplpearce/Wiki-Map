@@ -60,6 +60,8 @@ $( document ).ready(function() {
   // Add the geocoder
   L.Control.geocoder({
     iconLabel: true,
+    placeholder: 'Search for Address...',
+    collapsed: false,
   }).addTo(map);
 
   // Allow a custom cursor over map
@@ -156,7 +158,6 @@ $( document ).ready(function() {
       })
       // then pull the points from the map
       $.get(`/maps/${mapID}/markers`, function(markerData) {
-        let pointCount = 1;
         Object.values(markerData).forEach((markerRead) => {
           console.log(markerRead)
           const latlng = [markerRead.location.x, markerRead.location.y];
@@ -197,77 +198,6 @@ $( document ).ready(function() {
     $( '#map-create-new' ).hide();
     // And show all the map editor buttons
     $( '[id|="map-edit"]' ).show();
-    // Add the req modals to the map-modals div
-    $( '#map-modals' ).html(`
-      <!-- Modal for map points -->
-      <div class="modal fade" id="map-points-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Edit Points</h5>
-              <button type="button" class="close" data-dismiss="modal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <table id="map-points-table" class="table table-striped table-hover">
-                <thead class="thead-dark">
-                  <tr>
-                    <th class="text-center" scope="col">Point Number</th>
-                    <th class="text-center" scope="col">Latitude</th>
-                    <th class="text-center" scope="col">Longitude</th>
-                    <th class="text-center" scope="col">Title</th>
-                    <th class="text-center" scope="col">Description</th>
-                    <th class="text-center" scope="col">Image (URL)</th>
-                  </tr>
-                </thead>
-                <tbody id="map-points-table-body">
-                </tbody>
-              </table>
-            </div>
-            <div class="modal-footer">
-              <button id="modal-view-points-save" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Modal for map settings -->
-      <div class="modal fade" id="map-settings-modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Map Settings</h5>
-              <button type="button" class="close" data-dismiss="modal">
-                <span>&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="map-settings-add-team-members">Map Name</span>
-                </div>
-                <input id="map-settings-name" type="text" autocomplete="off" class="form-control" placeholder="My New Map!">
-              </div>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="map-settings-add-team-members">Teammates</span>
-                </div>
-                <input id="map-settings-add-team-members" type="username" autocomplete="off" class="form-control" placeholder="Comma Separated List of Usernames">
-              </div>
-              <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="map-settings-public">
-                <label class="custom-control-label" for="map-settings-public">Make map public?</label>
-              </div>
-              <br>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    `);
 
     // Ensure all modals don't propagate
     const newMapPoints = L.DomUtil.get('map-points-modal');

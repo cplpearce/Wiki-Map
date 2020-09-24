@@ -1,5 +1,6 @@
 
 $( document ).ready(function() {
+
   $('#login-form').submit((event) => {
     const credentials = {
       username : $('#login-username').val(),
