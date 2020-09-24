@@ -62,6 +62,7 @@ $( document ).ready(function() {
     iconLabel: true,
     placeholder: 'Search for Address...',
     collapsed: false,
+    position: 'bottomleft',
   }).addTo(map);
 
   // Allow a custom cursor over map
@@ -341,6 +342,9 @@ $( document ).ready(function() {
 
   // Enable a new editor without importing any points
   $( '#map-create-new' ).on('click', () => {
+    $( '#map-settings-name' ).val('');
+    $( '#map-settings-public' ).val('');
+    $( '#map-settings-add-team-members' ).val('');
     mapID = '';
     editorEnable()
   });
