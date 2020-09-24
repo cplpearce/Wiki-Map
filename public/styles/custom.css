@@ -18,6 +18,10 @@ body, p, span, div, strong {
   text-align: center;
   font-size: 1.5em;
 }
+li {
+  font-size: 1em;
+  vertical-align: middle;
+}
 /* Classes */
 .navbar-brand {
   filter: invert(1);

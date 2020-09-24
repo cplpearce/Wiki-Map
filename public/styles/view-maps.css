@@ -3,18 +3,12 @@
   display: none;
 }
 #maps-viewer-wrapper {
-  padding-left: 5%;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   margin: 2vh 0;
   overflow-y: scroll;
   overflow-y: auto;
-}
-.card {
-  min-width: 200px;
-  margin: 10px;
-  padding: 10px;
 }
 .map-editor-modal-dialog {
   width: 100%;
@@ -32,8 +26,21 @@
   width: 200px;
   height: 200px;
 }
-#map-edit-frame{
-  width: 100px;
-  height: 100%;
-  width: 100%;
+.fav-star {
+  height: 1.5em;
+  width: 1.5em;
+}
+.view-title{
+  height: 5em;
+  max-height: 5em;
+  font-size: 1rem;
+}
+.view-date {
+  max-height: 3em;
+}
+view-buttons {
+  max-height: 6em;
+}
+.card {
+  width: 24vw;
 }

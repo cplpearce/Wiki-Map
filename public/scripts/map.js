@@ -42,6 +42,18 @@ $( document ).ready(function() {
     });
   }
 
+  // Hide the toolbar buttons and remove any elements
+  function exitMapEdit() {
+    // Show the create map button
+    $( '#map-create-new' ).show();
+    // And hide all the map editor buttons
+    $( '[id|="map-edit"]' ).hide();
+    // Remove any layers
+    clearAllLayers()
+    // clear any set mapID
+    mapID = '';
+  }
+
   // Add the locate me button
   L.control.locate().addTo(map);
 
@@ -116,6 +128,7 @@ $( document ).ready(function() {
       map.fitBounds(bounds);
     });
   }
+  // End of mapViewer
 
   // To begin upon creating a new map
   // When the create-new button is pressed
@@ -172,6 +185,11 @@ $( document ).ready(function() {
         });
         const bounds = markerGroup.getBounds().pad(0.5);
         map.fitBounds(bounds);
+
+        // Ctrl click delete
+        marker.on('click', function(event) {
+          if (event.originalEvent.ctrlKey) {markerGroup.removeLayer(event.target)};
+        });
       });
     }
 
@@ -383,23 +401,12 @@ $( document ).ready(function() {
       // Add a toast
     });
 
-    // Hide the toolbar buttons and remove any elements
-    function exitMapEdit() {
-      // Show the create map button
-      $( '#map-create-new' ).show();
-      // And hide all the map editor buttons
-      $( '[id|="map-edit"]' ).hide();
-      // Remove the markerGroup
-      map.removeLayer(markerGroup);
-      // clear any set mapID
-      mapID = '';
-    }
-
     // Call exitMapEdit
     $( '#map-edit-cancel-btn' ).click(() => {
       exitMapEdit();
     });
   };
+  // End of mapEditor
 
   // Enable a new editor without importing any points
   $( '#map-create-new' ).on('click', () => {
