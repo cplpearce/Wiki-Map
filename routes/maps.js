@@ -68,6 +68,27 @@ module.exports = (db) => {
   /// Map specific ///
   ////////////////////
 
+
+  router.get("/", (req,res) => {
+    if (!req.session.user_id) req.session.user_id = 0;
+    db.query(`
+    SELECT title, date_created, last_updated, share_url,
+    EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS favorite,
+    EXISTS(SELECT * FROM collaborations WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS collaborator_on,
+    (SELECT COUNT(*) FROM favorite_maps WHERE map_id = maps.id AND active = TRUE AND private = FALSE) AS favorited
+    FROM maps
+    WHERE active = TRUE AND private = FALSE
+    ORDER BY favorited DESC;`)
+      .then(data => {
+        res.json(data.rows);
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
+
   router.post("/", (req, res) => {
     const subGroup = req.body.map_req;
     let queryFilter = "";
@@ -91,8 +112,12 @@ module.exports = (db) => {
       break;
     }
     if (!queryFilter) return new Error("Query did not work");
-    db.query(`SELECT * FROM maps
-              ${queryFilter};`)
+    db.query(`SELECT title, date_created, last_updated, share_url
+              EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS favorite,
+              EXISTS(SELECT * FROM collaborations WHERE user_id = ${req.session.user_id} AND map_id =maps.id) AS collaborator_on,
+              FROM maps
+              ${queryFilter}
+              AND active = TRUE;`)
       .then(data => {
         const user_id  = req.session.user_id;
         const maps = data.rows;
