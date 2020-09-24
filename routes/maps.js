@@ -173,7 +173,7 @@ module.exports = (db) => {
 
   router.post("/create", (req, res) => {
     const mapTitle = req.body.map_name;
-    const user_id = req.session.user_id;
+    const { user_id = 0 }  = req.session;
     const private = req.body.map_private;
     console.log(mapTitle, user_id, private);
     if (user_id) {
@@ -206,7 +206,11 @@ module.exports = (db) => {
 
   router.post("/:id/favorite", (req, res) => {
     const map_id = req.params.id;
-    const user_id = req.session.user_id;
+    const { user_id = 0 }  = req.session;
+
+    db.query(`
+    SELECT EXISTS (SELECT * FROM favorite_maps WHERE map_id = $1 AND user_id = ${user_id})
+    `, [map_id]).then(data => console.log(data.rows[0].exists));
 
     db.query(`
     INSERT INTO favorite_maps (user_id, map_id)
@@ -250,7 +254,7 @@ module.exports = (db) => {
   router.put("/:id", (req, res) => {
     const { points, map_name, map_private, team  } = req.body;
     const map_id = req.params.id;
-    const user_id = req.session.user_id;
+    const { user_id = 0 }  = req.session;
     const sortedPoints = sortNewPoints(points);
     const updateMap =
     db.query(`UPDATE maps
