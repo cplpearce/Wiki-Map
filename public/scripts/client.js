@@ -2,8 +2,10 @@
 $( document ).ready(function() {
   // Set all the pynPoint divs to hidden at load
   $( '#pynPoint-container' ).children().css('display', 'none');
+  // If there's no cookie, render the login page
+  $( '#container-login' ).css('display', 'flex');
   // View manager
-  $(document).on('click', "[id|='view']", function() {
+  $( "[id|='view']" ).click(function() {
     if (this.id !== 'view-view-maps') {
       // Fade all the divs
       $( '#pynPoint-container' ).children().css('display', 'none');

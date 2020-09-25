@@ -35,7 +35,7 @@ $( document ).ready(function() {
   };
 
   // Get my maps on nav click
-  $(document).on("click", '[id|="viewer"]', function() {
+  $( '[id|="viewer"]' ).click(function() {
     const map_req_type = this.id.split('-').slice(1).join('-');
     $.get('/maps').then(function(res) {
       $( '#maps-viewer-wrapper' ).empty();
@@ -58,7 +58,7 @@ $( document ).ready(function() {
         } else if (map_req_type === 'public-maps') {
         // View all public map (users map, any other public maps)
           if (!map.is_private) {
-            if (map.is_owner) {
+            if ( map.is_owner || map.collaborator_on) {
               $( '#maps-viewer-wrapper' ).append(buildMapCard(map));
             } else {
               $( '#maps-viewer-wrapper' ).append(buildMapCard(map, false));
