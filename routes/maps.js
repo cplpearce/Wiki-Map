@@ -152,7 +152,7 @@ module.exports = (db) => {
     private AS is_private,
     (SELECT COUNT(*) FROM favorite_maps WHERE map_id = maps.id AND active = TRUE) AS favorited
     FROM maps
-    JOIN collaborations ON map_id = maps.id
+    LEFT JOIN collaborations ON map_id = maps.id
     WHERE active = TRUE AND (private = FALSE OR owner_id = ${user_id} OR collaborations.user_id = ${user_id});`)
       .then(data => {
         res.json(data.rows);
