@@ -15,6 +15,7 @@ $( document ).ready(function() {
   // Build the HTML bootstrap card for our maps
   const buildMapCard = (map, edit = true) => {
     const date = new Date(map.date_created);
+    console.log(map)
     const url = map.map_thumb || 'https://static.tvtropes.org/pmwiki/pub/images/old_map_1872.jpg';
 
     let mapCard = $( `

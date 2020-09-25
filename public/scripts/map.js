@@ -185,7 +185,7 @@ $( document ).ready(function() {
           $( '#map-settings-name' ).val(mapData.maps.title);
           $( '#map-settings-url' ).val(mapData.maps.map_thumb);
           $( '#map-settings-public' ).val(mapData.maps.private);
-          $( '#map-settings-add-team-members' ).val(mapData.collaborators.map((mbr) => console.log(mbr.name)).join(', '));
+          $( '#map-settings-add-team-members' ).val(mapData.collaborators.map((mbr) => mbr.name)).join(', ');
         })
         // then pull the points from the map
         $.get(`/maps/${mapID}/markers`, function(markerData) {
