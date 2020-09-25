@@ -256,7 +256,7 @@ module.exports = (db) => {
     if (user_id) {
       db.query(
         `INSERT INTO maps (title, owner_id, private, map_thumb)
-        VALUES ($1, ${user_id}, ${map_private}, $3)
+        VALUES ($1, ${user_id}, ${map_private}, $2)
         RETURNING *;`,
         [mapTitle, `${map_thumb}`])
         .then(data => {
@@ -356,7 +356,7 @@ module.exports = (db) => {
 
 
   router.put("/:id", (req, res) => {
-    const { points, map_name, map_private, team  } = req.body;
+    const { points, map_name, map_private, team, map_thumb  } = req.body;
     const map_id = req.params.id;
     const { user_id = 0 }  = req.session;
     const sortedPoints = sortNewPoints(points);
@@ -367,9 +367,9 @@ module.exports = (db) => {
 
     const updateMap = () => {
       return db.query(`UPDATE maps
-      SET (title, private) = ($1, $2)
+      SET (title, private, map_thumb) = ($1, $2, $3)
       WHERE id = ${map_id};`,
-      [`${map_name}`, `${map_private}`]);
+      [`${map_name}`, `${map_private}`, `${map_thumb}`]);
     };
 
     db.query(`
