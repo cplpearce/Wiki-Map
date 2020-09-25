@@ -89,4 +89,16 @@ $( document ).ready(() => {
       });
     }
   });
+  $( '[id|="change-pwd"]' ).keyup(() => {
+    if ($( '#change-pwd-2' ).val() !== $( '#change-pwd-1' ).val()) {
+      $( '#change-password-label-2' ).html('Passwords do not match!');
+    } else {
+      $( '#change-password-label-2' ).html('Passwords match!');
+      $( '#submit-new-password' ).click(() => {
+        $.put('/login/password', { password: $( '#change-pwd-2' ).val() }, () => {
+
+        })
+      })
+    }
+    });
 });

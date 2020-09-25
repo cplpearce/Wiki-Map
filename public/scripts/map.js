@@ -13,7 +13,7 @@ $( document ).ready(function() {
     if (data !== 'no login') {
       x = data.info.location.x
       y = data.info.location.y
-    }
+    };
 
     // Hide unused toolbar items
     $( '[id|="map-edit"]' ).hide();
@@ -24,7 +24,7 @@ $( document ).ready(function() {
       $( '#map-settings-url' ).val('');
       $( '#map-settings-public' ).checked = false;
       $( '#map-settings-add-team-members' ).val('');
-    }
+    };
 
     // Set the popup internals
     function renderPopup(marker) {
@@ -39,7 +39,7 @@ $( document ).ready(function() {
         <img class="point-image" src="${marker.options.image}" onerror="this.style.display='none'"/>
       </div>
       `;
-    }
+    };
 
     // Ensure all divs in the map don't propagate
     const toolbar = L.DomUtil.get('map-toolbar');
