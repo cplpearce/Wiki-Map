@@ -96,9 +96,12 @@ $( document ).ready(() => {
       $( '#change-password-label-2' ).html('Passwords match!');
       $( '#submit-new-password' ).click(() => {
         $.ajax({
+          type: 'PUT',
           url: '/login/password',
-          data: { password: $( '#change-pwd-2' ).val() },
+          data: { password: $( '#change-pwd-2' ).val()},
         });
+        $( '#change-pwd-2' ).val('');
+        $( '#change-pwd-1' ).val('');
       });
     };
     });
