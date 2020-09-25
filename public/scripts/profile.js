@@ -8,14 +8,21 @@ $( document ).ready(() => {
     method: "GET",
     url: "/users/user",
   }).then(data => {
+    // If the user isn't logged in
     if (data === 'no login') {
       // Render the login page
       $( '#container-login' ).css('display', 'flex');
+      // Hide the create new map button
       $( '#map-create-new' ).remove();
+      // Change logout - to login
       $( '#logout' ).html('Login');
+      // Logout's button color to green (success)
       $( '#logout' ).attr('class', 'btn btn-success');
+      // And its ID to #login
       $( '#logout' ).attr('id', 'login');
+      // And hide the profile button
       $( '#view-profile' ).hide();
+      // And replace the entire group-button views with a new dropdown
       $( '#group-view-btns' ).replaceWith(`
       <div id="group-view-btns" class="btn-group" role="group">
         <button id="view-view-maps" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
