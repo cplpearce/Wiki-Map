@@ -1,6 +1,5 @@
 const express = require('express');
 const router  = express.Router();
-const app     = express();
 
 
 module.exports = (db) => {
@@ -21,6 +20,22 @@ module.exports = (db) => {
           req.session.user_id = data.rows[0].id;
           res.send(`${data.rows[0].id}`);
         }
+      })
+      .catch(err => {
+        res
+          .status(500)
+          .json({ error: err.message });
+      });
+  });
+
+  router.put("/password", (req, res) => {
+    const newPassword = req.body.password;
+    db.query(`
+    UPDATE users
+    SET password = $1;
+    `,[newPassword])
+      .then(data => {
+        res.status(200);
       })
       .catch(err => {
         res
