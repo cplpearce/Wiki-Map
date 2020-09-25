@@ -244,7 +244,7 @@ $( document ).ready(function() {
 
       // Create a point when dblclicking basemap
       map.on('dblclick', (event) => {
-        const marker = new L.marker(event.latlng, {pointNumber: pointCount, title: `Point ${pointCount}`, description: 'A brief point description!', image: '', draggable: true}).addTo(markerGroup);
+        const marker = new L.marker(event.latlng, {pointNumber: pointCount, title: `Pyn ${pointCount}`, description: 'A brief pyn description!', image: '', draggable: true}).addTo(markerGroup);
         marker.bindPopup(renderPopup(marker), {maxWidth : 200});
         // set it's Tooltip to its name
         marker.bindTooltip(marker.options.title,
