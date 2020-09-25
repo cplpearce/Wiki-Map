@@ -31,8 +31,14 @@
   width: 1.5em;
 }
 .view-image {
-  width: 15em;
-  height: 8em;
+  display: block;
+  width: 100%;
+}
+.view-image-wrapper {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  max-height: 8em;
 }
 .view-title{
   max-height: 5em;
@@ -53,6 +59,7 @@
 }
 .card {
   width: 24vw;
+  overflow: hidden;
 }
 .private-card {
   background-color: rgba(218, 201, 201, 0.4);

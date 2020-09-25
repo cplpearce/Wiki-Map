@@ -61,8 +61,8 @@ $( document ).ready(() => {
       let favorited = "";
       let collabs = "";
       // Generate the favs and collab maps
-      data.favs.map((fav) => favorited += `<li>${fav.fav_map}`);
-      data.collabs.map((collab) => collabs += `<li>${collab.collab_map}`);
+      data.favs.map((fav) => favorited += `${fav.fav_map}<br>`);
+      data.collabs.map((collab) => collabs += `${collab.collab_map}<br>`);
       // Begin a reverse Geocode for the current user's home city
       // nominatim reverse geo > as format JSON, at zoom level 10, on the users lat (x) and lon (y)
       $.get(`https://nominatim.openstreetmap.org/reverse?format=json&zoom=10&lat=${location.x}&lon=${location.y}`)
@@ -76,10 +76,10 @@ $( document ).ready(() => {
                 User: <strong>${name}</strong>
               </div>
               <ul class="list-group list-group-flush">
-                <li class="list-group-item">Location: ${res.address.city}, ${res.address.state}, ${res.address.country}</li>
-                <li class="list-group-item">Email: ${email}</li>
-                <li class="list-group-item"><ul>${favorited}</ul></li>
-                ${collabs.length ? '<li class="list-group-item">collabs</li>' : ''}
+                <li class="list-group-item"><strong>Location:</strong> ${res.address.city}, ${res.address.state}, ${res.address.country}</li>
+                <li class="list-group-item"><strong>Email:</strong> ${email}</li>
+                <li class="list-group-item"><strong>Favorites</strong><br>${favorited}</li>
+                <li class="list-group-item"><strong>Colloborations</strong><br>${collabs}</li>
               </ul>
             </div>
           </article>
