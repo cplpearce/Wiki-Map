@@ -145,7 +145,7 @@ module.exports = (db) => {
   router.get("/", (req,res) => {
     const { user_id = 0 }  = req.session;
     db.query(`
-    SELECT DISTINCT ON (id) id, title, date_created, last_updated, share_url,
+    SELECT DISTINCT ON (id) id, title, date_created, last_updated, share_url, map_thumb
     EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${user_id} AND map_id =maps.id) AS favorite,
     EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on,
     EXISTS(SELECT * FROM users WHERE users.id = maps.owner_id AND users.id = ${user_id}) AS is_owner,
@@ -185,7 +185,7 @@ module.exports = (db) => {
       break;
     }
     if (!queryFilter) return new Error("Query did not work");
-    db.query(`SELECT id, title, date_created, last_updated, share_url,
+    db.query(`SELECT id, title, date_created, last_updated, share_url, map_thumb,
               EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${user_id} AND map_id =maps.id) AS favorite,
               EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on,
               EXISTS(SELECT * FROM users WHERE users.id = maps.owner_id AND users.id = ${user_id}) AS is_owner
@@ -232,7 +232,7 @@ module.exports = (db) => {
       `SELECT *
       FROM maps
       WHERE id = $1 AND maps.active = TRUE;`,
-      [map_id])
+      [map_id]);
 
     const collabName = getCollabNames(map_id, db);
 
@@ -249,16 +249,16 @@ module.exports = (db) => {
   ///Creat new map
 
   router.post("/create", (req, res) => {
-    const { points, map_name, map_private, team  } = req.body;
+    const { points, map_name, map_private, team, map_thumb  } = req.body;
+    console.log(req.body)
     const mapTitle = req.body.map_name;
     const { user_id = 0 }  = req.session;
     if (user_id) {
-
       db.query(
-        `INSERT INTO maps (title, owner_id, private)
-        VALUES ($1, ${user_id}, ${map_private})
+        `INSERT INTO maps (title, owner_id, private, map_thumb)
+        VALUES ($1, ${user_id}, ${map_private}, $3)
         RETURNING *;`,
-        [mapTitle])
+        [mapTitle, `${map_thumb}`])
         .then(data => {
           const map_id = data.rows[0].id;
           addNewMarkers(req.body.points, map_id, user_id, db);
