@@ -30,6 +30,10 @@
   height: 1.5em;
   width: 1.5em;
 }
+.view-image {
+  width: 15em;
+  height: 8em;
+}
 .view-title{
   max-height: 5em;
   font-size: 1em;

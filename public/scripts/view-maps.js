@@ -14,10 +14,13 @@ $( document ).ready(function() {
 
   // Build the HTML bootstrap card for our maps
   const buildMapCard = (map, edit = true) => {
-    date = new Date(map.date_created);
+    const date = new Date(map.date_created);
+    const url = map.map_thumb || 'https://static.tvtropes.org/pmwiki/pub/images/old_map_1872.jpg';
+
     let mapCard = $( `
     <div id="map-card-${map.id}" class="card map-card m-1">
       <ul class="list-group list-group-flush">
+        <li class="list-group-item view-image my-auto"><img src="${url}" onerror="this.style.display='none'"/></li>
         <li class="list-group-item view-title text-center align-middle my-auto"><strong>${map.title}</strong></li>
         <li class="list-group-item view-date">Created: ${date.toDateString()}</li>
         <li class="list-group-item view-date">Favorite Count: <span id="fav-count-${map.id}">${map.favorited}</span></li>
