@@ -21,7 +21,11 @@ $( document ).ready(function() {
     let mapCard = $( `
     <div id="map-card-${map.id}" class="card map-card m-1">
       <ul class="list-group list-group-flush">
-        <li class="list-group-item view-image my-auto"><img src="${url}" onerror="this.style.display='none'"/></li>
+        <li class="list-group-item">
+          <div class="view-image-wrapper">
+            <img class="view-image" src="${url}" onerror="this.style.display='none'"/>
+          </div>
+        </li>
         <li class="list-group-item view-title text-center align-middle my-auto"><strong>${map.title}</strong></li>
         <li class="list-group-item view-date">Created: ${date.toDateString()}</li>
         <li class="list-group-item view-date">Favorite Count: <span id="fav-count-${map.id}">${map.favorited}</span></li>
