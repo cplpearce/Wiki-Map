@@ -21,6 +21,7 @@ $( document ).ready(function() {
     // Clear any previous map entries
     function zeroizeMapSettings() {
       $( '#map-settings-name' ).val('My New Map!');
+      $( '#map-settings-url' ).val('My New Map!');
       $( '#map-settings-public' ).checked = false;
       $( '#map-settings-add-team-members' ).val('');
     }
@@ -115,6 +116,7 @@ $( document ).ready(function() {
       // First get an update the map metadata
       $.get(`/maps/${mapID}`, function(mapData) {
         $( '#map-settings-name' ).val(mapData.maps.title);
+        $( '#map-settings-url' ).val(mapData.maps.map_thumb);
         $( '#map-settings-public' ).val(mapData.maps.private);
       })
 
@@ -181,8 +183,9 @@ $( document ).ready(function() {
         // First get an update the map metadata
         $.get(`/maps/${mapID}`, function(mapData) {
           $( '#map-settings-name' ).val(mapData.maps.title);
+          $( '#map-settings-url' ).val(mapData.maps.map_thumb);
           $( '#map-settings-public' ).val(mapData.maps.private);
-          $( '#map-settings-add-team-members' ).val(mapData.collaborators);
+          $( '#map-settings-add-team-members' ).val(mapData.collaborators.map((mbr) => mbr.name)).join(', ');
         })
         // then pull the points from the map
         $.get(`/maps/${mapID}/markers`, function(markerData) {
@@ -333,6 +336,7 @@ $( document ).ready(function() {
           });
           postNewMapData.team = $( '#map-settings-add-team-members' ).val();
           postNewMapData.map_name = $( '#map-settings-name' ).val();
+          postNewMapData.map_thumb = $( '#map-settings-url' ).val();
           postNewMapData.map_private = $( '#map-settings-public' )[0].checked;
           $.ajax({
             method: "PUT",
@@ -352,6 +356,7 @@ $( document ).ready(function() {
           });
           postNewMapData.team = $( '#map-settings-add-team-members' ).val();
           postNewMapData.map_name = $( '#map-settings-name' ).val();
+          postNewMapData.map_thumb = $( '#map-settings-url' ).val();
           postNewMapData.map_private = $( '#map-settings-public' )[0].checked;
           $.ajax({
             method: "POST",
