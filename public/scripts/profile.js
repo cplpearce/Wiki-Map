@@ -95,10 +95,11 @@ $( document ).ready(() => {
     } else {
       $( '#change-password-label-2' ).html('Passwords match!');
       $( '#submit-new-password' ).click(() => {
-        $.put('/login/password', { password: $( '#change-pwd-2' ).val() }, () => {
-
-        })
-      })
-    }
+        $.ajax({
+          url: '/login/password',
+          data: { password: $( '#change-pwd-2' ).val() },
+        });
+      });
+    };
     });
 });
