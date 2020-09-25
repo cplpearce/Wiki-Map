@@ -185,10 +185,15 @@ $( document ).ready(function() {
           $( '#map-settings-name' ).val(mapData.maps.title);
           $( '#map-settings-url' ).val(mapData.maps.map_thumb);
           $( '#map-settings-public' ).val(mapData.maps.private);
-          $( '#map-settings-add-team-members' ).val(mapData.collaborators.map((mbr) => mbr.name)).join(', ');
+          try {
+            $( '#map-settings-add-team-members' ).val(mapData.collaborators.map((mbr) => mbr.name)).join(', ');
+          } catch (error) {
+            // If the map has no collab
+          }
         })
         // then pull the points from the map
         $.get(`/maps/${mapID}/markers`, function(markerData) {
+          console.log(markerData)
           Object.values(markerData).forEach((markerRead) => {
             const latlng = [markerRead.location.x, markerRead.location.y];
             marker = new L.marker(latlng, {
