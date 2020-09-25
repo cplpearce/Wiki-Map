@@ -145,7 +145,7 @@ module.exports = (db) => {
   router.get("/", (req,res) => {
     const { user_id = 0 }  = req.session;
     db.query(`
-    SELECT DISTINCT ON (id) id, title, date_created, last_updated, share_url,
+    SELECT DISTINCT ON (id) id, title, date_created, last_updated, share_url, map_thumb
     EXISTS(SELECT * FROM favorite_maps WHERE user_id = ${user_id} AND map_id =maps.id) AS favorite,
     EXISTS(SELECT * FROM collaborations WHERE user_id = ${user_id} AND map_id =maps.id) AS collaborator_on,
     EXISTS(SELECT * FROM users WHERE users.id = maps.owner_id AND users.id = ${user_id}) AS is_owner,
@@ -250,6 +250,7 @@ module.exports = (db) => {
 
   router.post("/create", (req, res) => {
     const { points, map_name, map_private, team, map_thumb  } = req.body;
+    console.log(req.body)
     const mapTitle = req.body.map_name;
     const { user_id = 0 }  = req.session;
     if (user_id) {
