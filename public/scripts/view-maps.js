@@ -2,6 +2,7 @@
 $( document ).ready(function() {
 
   const buildMapCard = (map, edit = true) => {
+    console.log(map)
     date = new Date(map.date_created);
     let mapCard = $( `
     <div id="map-card-${map.id}" class="card map-card m-1">
@@ -58,7 +59,11 @@ $( document ).ready(function() {
         } else if (map_req_type === 'public-maps') {
         // View all public map (users map, any other public maps)
           if (!map.is_private) {
-            $( '#maps-viewer-wrapper' ).append(buildMapCard(map));
+            if (map.is_owner) {
+              $( '#maps-viewer-wrapper' ).append(buildMapCard(map));
+            } else {
+              $( '#maps-viewer-wrapper' ).append(buildMapCard(map, false));
+            }
           }
         }
       });

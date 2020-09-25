@@ -14,9 +14,14 @@ $( document ).ready(() => {
       $( '#logout' ).attr('id', 'login');
       $( '#view-profile' ).hide();
       $( '#group-view-btns' ).replaceWith(`
-        <button id="viewer-public-maps" type="button" class="btn btn-warning">
+      <div id="group-view-btns" class="btn-group" role="group">
+        <button id="view-view-maps" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
           View Maps
         </button>
+        <div class="dropdown-menu">
+          <a id="viewer-public-maps" id="view-popular-map" class="dropdown-item">Public Maps</a>
+        </div>
+      </div>
       `);
       // $( '[id|="viewer"]' ).click();
       $( '#nav-buttons' ).show();

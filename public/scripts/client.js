@@ -3,7 +3,7 @@ $( document ).ready(function() {
   // Set all the pynPoint divs to hidden at load
   $( '#pynPoint-container' ).children().css('display', 'none');
   // View manager
-  $( "[id|='view']" ).click(function() {
+  $(document).on('click', "[id|='view']", function() {
     if (this.id !== 'view-view-maps') {
       // Fade all the divs
       $( '#pynPoint-container' ).children().css('display', 'none');
