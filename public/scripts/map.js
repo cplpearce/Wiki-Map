@@ -21,7 +21,7 @@ $( document ).ready(function() {
     // Clear any previous map entries
     function zeroizeMapSettings() {
       $( '#map-settings-name' ).val('My New Map!');
-      $( '#map-settings-url' ).val('My New Map!');
+      $( '#map-settings-url' ).val('');
       $( '#map-settings-public' ).checked = false;
       $( '#map-settings-add-team-members' ).val('');
     }
