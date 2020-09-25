@@ -4,6 +4,17 @@
 $( document ).ready(function() {
 
   $.get('/users/user', function(data) {
+
+    // first set x.y map coords to Toronto
+    let x = 43.6532;
+    let y = -79.3832;
+
+    // if the user is logged in, set it to their location
+    if (data !== 'no login') {
+      x = data.info.location.x
+      y = data.info.location.y
+    }
+
     // Hide unused toolbar items
     $( '[id|="map-edit"]' ).hide();
 
@@ -38,7 +49,7 @@ $( document ).ready(function() {
     // replace "toner" here with "terrain" or "watercolor"
     const basemapLayer = new L.StamenTileLayer("toner");
     const map = new L.Map("map-frame", {
-        center: new L.LatLng(data.info.location.x, data.info.location.y),
+        center: new L.LatLng(x, y),
         zoom: 12,
     });
 
