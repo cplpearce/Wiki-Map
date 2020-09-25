@@ -1,5 +1,7 @@
 // On document ready
 $( document ).ready(() => {
+  // Hide everything at first
+  $( '#container-login' ).hide();
   $( '#nav-buttons' ).hide();
   // With an AJAX GET, get our user data
   $.ajax({
@@ -9,6 +11,7 @@ $( document ).ready(() => {
     if (data === 'no login') {
       // Render the login page
       $( '#container-login' ).css('display', 'flex');
+      $( '#map-create-new' ).remove();
       $( '#logout' ).html('Login');
       $( '#logout' ).attr('class', 'btn btn-success');
       $( '#logout' ).attr('id', 'login');
@@ -25,7 +28,24 @@ $( document ).ready(() => {
       `);
       // $( '[id|="viewer"]' ).click();
       $( '#nav-buttons' ).show();
+      $( "[id|='view']" ).click(function() {
+        if (this.id !== 'view-view-maps') {
+          // Fade all the divs
+          $( '#pynPoint-container' ).children().css('display', 'none');
+          // Show the element desired
+          $( `#container-${this.id.split('-').slice(1).join('-')}` ).css('display', 'flex');
+        } else {
+          $( "[id|='viewer']" ).click(() => {
+              // Fade all the divs
+            $( '#pynPoint-container' ).children().css('display', 'none');
+            // Show the element desired
+            $( `#container-${this.id.split('-').slice(1).join('-')}` ).css('display', 'flex');
+            $( '#map-create-new' ).hide();
+          });
+        }
+      });
     } else {
+      $( "#view-map" ).click();
       // Unhide the nav buttons
       $( '#nav-buttons' ).show();
       // set name/email/location to data.info

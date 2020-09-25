@@ -1,6 +1,18 @@
 // A $( document ).ready() listner
 $( document ).ready(function() {
+  // Check if the user is logged in
+  let loggedIn = true;
+  $.ajax({
+    method: "GET",
+    url: "/users/user",
+  }).then(data => {
+    if (data === 'no login') {
+      // If not set to false
+      loggedIn = false;
+    };
+  });
 
+  // Build the HTML bootstrap card for our maps
   const buildMapCard = (map, edit = true) => {
     date = new Date(map.date_created);
     let mapCard = $( `
@@ -30,12 +42,16 @@ $( document ).ready(function() {
     if (edit) {
       $( `#map-card-buttons-${map.id}`, mapCard ).prepend(`<button id="map-card-edit-${map.id}" type="button" class="btn btn-primary btn-block">Edit</button>`);
     }
+    // If not logged in, remove the fav button
+    if (!loggedIn) {
+      $( `#map-card-favorite-${map.id}`, mapCard ).remove();
+    }
     // return the mapcard html
     return mapCard;
   };
 
   // Get my maps on nav click
-  $( '[id|="viewer"]' ).click(function() {
+  $(document).on('click', '[id|="viewer"]', function() {
     const map_req_type = this.id.split('-').slice(1).join('-');
     $.get('/maps').then(function(res) {
       $( '#maps-viewer-wrapper' ).empty();
@@ -66,7 +82,6 @@ $( document ).ready(function() {
           }
         }
       });
-
     });
   })
 
