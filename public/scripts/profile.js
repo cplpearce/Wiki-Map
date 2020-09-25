@@ -79,7 +79,7 @@ $( document ).ready(() => {
                 <li class="list-group-item"><strong>Location:</strong> ${res.address.city}, ${res.address.state}, ${res.address.country}</li>
                 <li class="list-group-item"><strong>Email:</strong> ${email}</li>
                 <li class="list-group-item"><strong>Favorites</strong><br>${favorited}</li>
-                <li class="list-group-item"><strong>Colloborations</strong><br>${collabs}</li>
+                <li class="list-group-item"><strong>Collaborations</strong><br>${collabs}</li>
               </ul>
             </div>
           </article>
