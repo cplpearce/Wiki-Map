@@ -28,8 +28,6 @@ $( document ).ready(() => {
     } else {
       // Unhide the nav buttons
       $( '#nav-buttons' ).show();
-      // Launch into my-maps
-      $( '#viewer-my-maps' ).trigger('click');
       // set name/email/location to data.info
       const { name, email, location } = data.info;
       // init fav/collabs

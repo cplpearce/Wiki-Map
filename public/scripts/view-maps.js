@@ -2,7 +2,6 @@
 $( document ).ready(function() {
 
   const buildMapCard = (map, edit = true) => {
-    console.log(map)
     date = new Date(map.date_created);
     let mapCard = $( `
     <div id="map-card-${map.id}" class="card map-card m-1">

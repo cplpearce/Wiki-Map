@@ -20,7 +20,4 @@ $( document ).ready(function() {
     $.post("/login/logout");
     window.location.reload();
   });
-  $( '#login' ).click(() => {
-    $('#modalLoginForm').modal('toggle');
-  })
 });
