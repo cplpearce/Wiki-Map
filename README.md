@@ -4,7 +4,8 @@ A web app that allows users to collaboratively create maps which list multiple "
 ## Project Setup
 1. Install dependencies: `npm i`
 2. Fix to binaries for sass: `npm rebuild node-sass`
-3. Reset database: `npm run db:reset`
+3a. Set env database settings, user, and create a `labbers` database.
+3b. Reset database: `npm run db:reset`
   - Check the db folder to see what gets created and seeded in the SDB
 4. Run the server: `npm run local`
   - Note: nodemon is used, so you should not have to restart your server
