@@ -15,3 +15,15 @@ A web app that allows users to collaboratively create maps which list multiple "
 - Node 10.x or above
 - NPM 5.x or above
 - PG 6.x
+
+## Screenshots
+### View a Map
+![View Map](https://github.com/cplpearce/Wiki-Map/blob/master/screenshots/NewMapView.png)
+### Edit a Map
+![Edit Map](https://github.com/cplpearce/Wiki-Map/blob/master/screenshots/EditMap.png)
+### Edit a Map
+![Map Settings](https://github.com/cplpearce/Wiki-Map/blob/master/screenshots/MapSettings.png)
+### Edit a Map
+![User Prodile](https://github.com/cplpearce/Wiki-Map/blob/master/screenshots/Profile.png)
+### View My Maps
+![View My Maps](https://github.com/cplpearce/Wiki-Map/blob/master/screenshots/ViewMyMaps.png)
